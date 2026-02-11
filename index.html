@@ -12,21 +12,27 @@ body { background: #05000a; color: #fff; font-family: 'Cairo', sans-serif; overf
 
 #starField { position: fixed; inset: 0; z-index: -1; }
 
-/* 1. تأثير القلب الترحيبي (بأسلوب البالونة) */
+/* قلب ترحيبي بنبض طبيعي */
 #introOverlay {
     position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
     z-index: 9999; background: #05000a; transition: 0.8s;
 }
 .intro-heart {
     color: #ff2d75; font-size: 250px; position: relative;
-    animation: heartFloat 2s ease-in-out infinite; transition: all 0.6s;
+    animation: heartPulse 1.5s infinite alternate ease-in-out;
     filter: drop-shadow(0 0 40px #ff2d75);
 }
 .intro-heart span {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     font-family: 'Dancing Script', cursive; font-size: 45px; color: #fff; text-shadow: 0 0 10px #000;
 }
-@keyframes heartFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.05); }
+    50% { transform: scale(1.1); }
+    75% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
 
 /* شاشة الدخول */
 .screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 10; padding: 20px; }
@@ -43,12 +49,12 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
 
 .developer-tag { margin-top: 20px; font-size: 12px; color: rgba(255,255,255,0.3); }
 
-/* البالونة اللي بتنزل الاسم */
+/* البالونة */
 #mainBalloon {
     position: absolute; top: -300px; width: 100px; height: 130px; background: #ff2d75;
     border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; z-index: 50;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: top 3s ease-out; /* تم إزالة scale الهزّة */
+    transition: top 2.5s ease-out;
 }
 #mainBalloon::after { content: ''; position: absolute; bottom: -25px; width: 1px; height: 35px; background: #fff; }
 
@@ -59,9 +65,10 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
 /* الجواب المباشر */
 #letterOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 4000; padding: 20px; }
 .paper {
-    background: #fff; color: #333; width: 100%; max-width: 450px; padding: 35px 25px;
+    background: #fff; color: #333; width: 100%; max-width: 500px; padding: 35px 25px;
     border-radius: 20px; text-align: center; opacity: 0; transform: scale(0.5);
-    transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2); box-shadow: 0 0 50px rgba(255,45,117,0.3);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.6s;
+    box-shadow: 0 0 50px rgba(255,45,117,0.3);
 }
 .paper.show { opacity: 1; transform: scale(1); }
 
@@ -108,7 +115,8 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
         <h2 style="color:#ff2d75; font-family:'Dancing Script', cursive; margin-bottom:15px; font-size: 30px;">إلى ملكتي رودينا ❤️</h2>
         <div style="text-align: right; line-height: 1.8; font-size: 16px;">
             <p>حبيبتي رودي.. الـ 4 شهور اللي فاتوا دول كانوا أجمل أيام حياتي. كل يوم معاكي بكتشف إنك مش مجرد إنسانة عادية، إنتي الروح اللي بتنور أيامي والضحكة اللي بتهون عليا أي صعب.</p>
-            <p style="margin-top: 10px;">انتي أجمل صدفة خبطت في قلبي، وبوعدك إني أفضل جنبك ومعاكي في كل لحظة، نكبر مع بعض ونبني أحلامنا سوا. مفيش كلام يوصف غلاوتك في قلبي يا نن عيني.</p>
+            <p style="margin-top: 10px;">انتي أجمل صدفة خبطت في قلبي، وبوعدك إني أفضل جنبك ومعاكي في كل لحظة، نكبر مع بعض ونبني أحلامنا سوا. كل لحظة معاكِ بتخليني أحس بالسعادة الحقيقية.</p>
+            <p style="margin-top: 10px;">مفيش كلام يوصف غلاوتك في قلبي يا نن عيني، انتي مش بس حبيبتي، انتي كل حاجة حلوة في حياتي، وبوعدك إني هفضل أحبك وأحميكي طول العمر.</p>
         </div>
         <p style="font-size: 22px; margin-top: 20px; color:#ff2d75; font-family: 'Dancing Script', cursive;"><b>I Love You Forever ❤️</b></p>
         <button onclick="closeLetterDirect()" style="background:#555; width: 100px; margin-top:20px;">إغلاق</button>
@@ -139,7 +147,7 @@ function playMusic() {
     }
 }
 
-// انفجار القلب الترحيبي
+// انفجار القلب الترحيبي مع هزة طبيعية
 function popIntroHeart() {
     const heart = document.getElementById('introHeart');
     const overlay = document.getElementById('introOverlay');
@@ -148,7 +156,7 @@ function popIntroHeart() {
         setTimeout(() => {
             heart.style.transform = 'scale(2.5)';
             heart.style.opacity = '0';
-            createBurst(window.innerWidth/2, window.innerHeight/2);
+            createBurst(window.innerWidth/2, window.innerHeight/2, 50); // انفجار واقعي أكبر
             setTimeout(() => overlay.style.display = 'none', 600);
         }, 2500);
     }
@@ -171,7 +179,7 @@ function startMagic() {
                     document.getElementById('revealedName').style.transform = 'translateY(0)';
                     document.getElementById('uiBox').style.opacity = '1';
                     document.getElementById('uiBox').style.transform = 'translateY(0)';
-                    createBurst(window.innerWidth/2, window.innerHeight*0.2);
+                    createBurst(window.innerWidth/2, window.innerHeight*0.2, 30);
                     startFalling();
                 }, 3000);
             }, 500);
@@ -182,49 +190,56 @@ function startMagic() {
     }
 }
 
-function createBurst(x, y) {
-    for(let i=0; i<30; i++) {
+// انفجار بالقلوب
+function createBurst(x, y, count=30) {
+    for(let i=0; i<count; i++) {
         const d = document.createElement('div');
-        d.className = 'falling'; d.innerHTML = '❤️';
+        d.className = 'falling';
+        d.innerHTML = '❤️';
         d.style.left = x + (Math.random()*100 - 50) + 'px';
         d.style.top = y + (Math.random()*100 - 50) + 'px';
+        d.style.fontSize = (10 + Math.random()*20) + 'px';
         d.style.animationDuration = (1 + Math.random()) + 's';
-        document.body.appendChild(d); setTimeout(() => d.remove(), 2000);
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 2000);
     }
 }
 
+// تساقط القلوب العشوائي بعد البالون
 function startFalling() {
     setInterval(() => {
         const d = document.createElement('div');
         d.className = 'falling'; d.style.left = Math.random()*100 + 'vw'; d.style.top = '-50px';
         d.style.animationDuration = (4 + Math.random()*3) + 's';
         d.innerHTML = `❤️<span>Rodina</span>`;
-        document.body.appendChild(d); setTimeout(() => d.remove(), 7000);
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 7000);
     }, 600);
 }
 
-// الجواب المباشر
+// فتح الجواب بالأنيميشن
 function openLetterDirect() {
     document.getElementById('letterOverlay').style.display = 'flex';
-    setTimeout(() => {
-        document.getElementById('paper').classList.add('show');
-    }, 50);
+    setTimeout(() => document.getElementById('paper').classList.add('show'), 50);
 }
-
 function closeLetterDirect() {
     document.getElementById('paper').classList.remove('show');
-    setTimeout(() => {
-        document.getElementById('letterOverlay').style.display = 'none';
-    }, 500);
+    setTimeout(() => document.getElementById('letterOverlay').style.display = 'none', 500);
 }
 
+// عدّاد الوقت مرتب مع صفر للثواني والدقائق
 function updateCounter() {
     const diff = new Date() - new Date('2025-10-11T00:00:00');
-    const d = Math.floor(diff/86400000);
-    const h = Math.floor((diff/3600000)%24);
-    const m = Math.floor((diff/60000)%60);
-    const s = Math.floor((diff/1000)%60);
-    document.getElementById('loveCounter').innerHTML = `${d} يوم، ${h}:${m}:${s}`;
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff / 3600000) % 24);
+    const m = Math.floor((diff / 60000) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    const hh = h.toString().padStart(2,'0');
+    const mm = m.toString().padStart(2,'0');
+    const ss = s.toString().padStart(2,'0');
+
+    document.getElementById('loveCounter').innerHTML = `${d} يوم، ${hh}:${mm}:${ss}`;
 }
 setInterval(updateCounter, 1000);
 </script>
