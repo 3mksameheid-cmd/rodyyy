@@ -8,13 +8,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
 
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:#05000a; color:#fff; font-family:'Cairo',sans-serif; overflow:hidden; height:100vh; width:100vw; }
+        body { background:#05000a; color:#fff; font-family:'Cairo',sans-serif; overflow:hidden; height:100vh; width:100vw; cursor: pointer; }
         #starField { position:fixed; inset:0; z-index:-1; }
 
         /* قلب ترحيبي */
         #introOverlay {
             position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-            z-index:9999; background:#05000a;
+            z-index:9999; background:#05000a; pointer-events: none;
         }
         .intro-heart {
             color:#ff2d75; font-size:250px; position:relative;
@@ -72,11 +72,11 @@
         @keyframes fall { to { transform:translateY(110vh) rotate(360deg); } }
     </style>
 </head>
-<body>
+<body onclick="playMusicOnce()">
 
 <canvas id="starField"></canvas>
 
-<div id="musicPlayer"></div>
+<div id="musicContainer"></div>
 
 <div id="introOverlay">
     <div class="intro-heart" id="introHeart">❤️<span>Rodina</span></div>
@@ -85,7 +85,7 @@
 <div id="loginScreen" class="screen">
     <div class="glass-card">
         <h2>نورتي يا نن عيني ❤️</h2>
-        <input id="pass" type="text" placeholder="اكتبي اسمك هنا..." />
+        <input id="pass" type="password" placeholder="اكتبي اسمك هنا..." />
         <button onclick="startMagic()">دوسي هنا يا روحي ❤️</button>
         <p class="developer-tag">Designed by Sameh</p>
         <div id="wrong" style="color:#ff8aa8; margin-top:10px; opacity:0; font-size:13px;">الاسم غلط يا رودي.. ركزي 😢</div>
@@ -142,29 +142,31 @@ function drawStars(){
 }
 initStars(); drawStars();
 
-// القلب الترحيبي
-function popIntroHeart(){
-    const overlay=document.getElementById('introOverlay');
-    setTimeout(()=>{ overlay.style.display='none'; },3000);
+// تشغيل الأغنية عند أول ضغطة في أي مكان
+let isMusicPlaying = false;
+function playMusicOnce() {
+    if (!isMusicPlaying) {
+        const container = document.getElementById('musicContainer');
+        container.innerHTML = `
+            <iframe 
+                style="display:none"
+                src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY" 
+                allow="autoplay">
+            </iframe>`;
+        isMusicPlaying = true;
+    }
 }
 
-// دالة تشغيل الأغنية (يتم استدعاؤها عند التفاعل)
-function playMusic() {
-    const musicDiv = document.getElementById('musicPlayer');
-    musicDiv.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY" frameborder="0" allow="autoplay"></iframe>`;
-}
+// القلب الترحيبي
+setTimeout(()=>{ document.getElementById('introOverlay').style.display='none'; },3000);
 
 // بدء السحر
-let musicStarted = false;
 function startMagic(){
     let p=document.getElementById('pass').value.toLowerCase();
+    // الباص زي ما هو (رودينا)
     if(p==='rodina'||p==='رودينا'){
         
-        // تشغيل الموسيقى فور الضغط
-        if(!musicStarted){
-            playMusic();
-            musicStarted = true;
-        }
+        playMusicOnce(); // للتأكيد لو مشتغلتش من الضغطة الأولى
 
         document.getElementById('loginScreen').style.opacity='0';
         setTimeout(()=>{
@@ -190,11 +192,7 @@ function startMagic(){
     }
 }
 
-window.onload = () => {
-    popIntroHeart();
-};
-
-// بدء التساقط
+// تساقط القلوب
 function startFalling(){
     setInterval(()=>{
         const d=document.createElement('div');
@@ -217,7 +215,7 @@ function closeLetterDirect(){
     setTimeout(()=>document.getElementById('letterOverlay').style.display='none',500);
 }
 
-// عداد الحب
+// العداد
 function updateCounter(){
     const startDate=new Date('2025-10-11T00:00:00'); 
     const now=new Date();
@@ -226,10 +224,7 @@ function updateCounter(){
     const h=Math.floor((diff/3600000)%24);
     const m=Math.floor((diff/60000)%60);
     const s=Math.floor((diff/1000)%60);
-    const hh=h.toString().padStart(2,'0');
-    const mm=m.toString().padStart(2,'0');
-    const ss=s.toString().padStart(2,'0');
-    document.getElementById('loveCounter').innerHTML=`${d} يوم، ${hh}:${mm}:${ss}`;
+    document.getElementById('loveCounter').innerHTML=`${d} يوم، ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 }
 setInterval(updateCounter,1000);
 </script>
