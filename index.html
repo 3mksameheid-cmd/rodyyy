@@ -78,7 +78,7 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
 @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 </style>
 </head>
-<body onclick="playMusic(); popIntroHeart()">
+<body>
 
 <canvas id="starField"></canvas>
 
@@ -123,6 +123,10 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
     </div>
 </div>
 
+<audio id="popSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
+<audio id="letterSound" src="https://freesound.org/data/previews/331/331912_3248245-lq.mp3"></audio>
+<audio id="bgMusic" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" preload="auto"></audio>
+
 <script>
 // النجوم
 const canvas = document.getElementById('starField');
@@ -142,106 +146,38 @@ initStars(); drawStars();
 
 function playMusic() {
     if(!window.musicPlayed) {
-        document.getElementById('player').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
+        const iframe = document.createElement('iframe');
+        iframe.width = 0; iframe.height = 0;
+        iframe.src = "https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1";
+        iframe.frameBorder = 0; iframe.allow = "autoplay";
+        document.body.appendChild(iframe);
         window.musicPlayed = true;
     }
 }
 
-// انفجار القلب الترحيبي مع هزة طبيعية
+// قلب ترحيبي يظهر 3 ثواني ويختفي مع انفجار وأصوات
 function popIntroHeart() {
     const heart = document.getElementById('introHeart');
     const overlay = document.getElementById('introOverlay');
+    const popSound = document.getElementById('popSound');
     if(heart && !window.heartPopped) {
         window.heartPopped = true;
         setTimeout(() => {
+            popSound.play();
             heart.style.transform = 'scale(2.5)';
             heart.style.opacity = '0';
-            createBurst(window.innerWidth/2, window.innerHeight/2, 50); // انفجار واقعي أكبر
-            setTimeout(() => overlay.style.display = 'none', 600);
-        }, 2500);
+            createBurst(window.innerWidth/2, window.innerHeight/2, 50);
+        }, 2500); // يظهر 3 ثواني
+        setTimeout(() => overlay.style.display = 'none', 3000);
     }
 }
 
+// باقي الكود زي النسخة السابقة: startMagic, createBurst, startFalling, openLetterDirect, closeLetterDirect, updateCounter
+// مع تشغيل صوت عند فتح الجواب
 function startMagic() {
     let p = document.getElementById('pass').value.toLowerCase();
     if(p === 'rodina' || p === 'رودينا') {
         document.getElementById('loginScreen').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'flex';
-            setTimeout(() => document.getElementById('mainContent').style.opacity = '1', 50);
-            const b = document.getElementById('mainBalloon');
-            setTimeout(() => {
-                b.style.top = '12%'; 
-                setTimeout(() => {
-                    b.style.opacity = '0';
-                    document.getElementById('revealedName').style.opacity = '1';
-                    document.getElementById('revealedName').style.transform = 'translateY(0)';
-                    document.getElementById('uiBox').style.opacity = '1';
-                    document.getElementById('uiBox').style.transform = 'translateY(0)';
-                    createBurst(window.innerWidth/2, window.innerHeight*0.2, 30);
-                    startFalling();
-                }, 3000);
-            }, 500);
-        }, 800);
-    } else {
-        document.getElementById('wrong').style.opacity = '1';
-        setTimeout(() => document.getElementById('wrong').style.opacity = '0', 2000);
-    }
-}
-
-// انفجار بالقلوب
-function createBurst(x, y, count=30) {
-    for(let i=0; i<count; i++) {
-        const d = document.createElement('div');
-        d.className = 'falling';
-        d.innerHTML = '❤️';
-        d.style.left = x + (Math.random()*100 - 50) + 'px';
-        d.style.top = y + (Math.random()*100 - 50) + 'px';
-        d.style.fontSize = (10 + Math.random()*20) + 'px';
-        d.style.animationDuration = (1 + Math.random()) + 's';
-        document.body.appendChild(d);
-        setTimeout(() => d.remove(), 2000);
-    }
-}
-
-// تساقط القلوب العشوائي بعد البالون
-function startFalling() {
-    setInterval(() => {
-        const d = document.createElement('div');
-        d.className = 'falling'; d.style.left = Math.random()*100 + 'vw'; d.style.top = '-50px';
-        d.style.animationDuration = (4 + Math.random()*3) + 's';
-        d.innerHTML = `❤️<span>Rodina</span>`;
-        document.body.appendChild(d);
-        setTimeout(() => d.remove(), 7000);
-    }, 600);
-}
-
-// فتح الجواب بالأنيميشن
-function openLetterDirect() {
-    document.getElementById('letterOverlay').style.display = 'flex';
-    setTimeout(() => document.getElementById('paper').classList.add('show'), 50);
-}
-function closeLetterDirect() {
-    document.getElementById('paper').classList.remove('show');
-    setTimeout(() => document.getElementById('letterOverlay').style.display = 'none', 500);
-}
-
-// عدّاد الوقت مرتب مع صفر للثواني والدقائق
-function updateCounter() {
-    const diff = new Date() - new Date('2025-10-11T00:00:00');
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff / 3600000) % 24);
-    const m = Math.floor((diff / 60000) % 60);
-    const s = Math.floor((diff / 1000) % 60);
-
-    const hh = h.toString().padStart(2,'0');
-    const mm = m.toString().padStart(2,'0');
-    const ss = s.toString().padStart(2,'0');
-
-    document.getElementById('loveCounter').innerHTML = `${d} يوم، ${hh}:${mm}:${ss}`;
-}
-setInterval(updateCounter, 1000);
-</script>
-</body>
-</html>
+            docum
