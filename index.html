@@ -13,107 +13,76 @@
             display: flex; justify-content: center; align-items: center; height: 100vh;
         }
 
-        /* شاشة القفل مع قلوب متساقطة */
         #password-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #ff4d6d;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 1000; color: white; transition: 0.8s;
+            z-index: 1000; color: white;
         }
 
         input { 
             padding: 12px; border-radius: 25px; border: 2px solid white; 
             margin-top: 15px; text-align: center; outline: none; font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         button { 
             padding: 12px 35px; margin-top: 20px; border-radius: 25px; border: none; 
             background: white; color: #ff4d6d; cursor: pointer; font-weight: bold; 
             font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: 0.3s;
         }
-        button:hover { transform: scale(1.1); }
 
-        /* المحتوى الرئيسي */
-        #main-content { display: none; text-align: center; z-index: 10; animation: fadeIn 2s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #main-content { display: none; text-align: center; z-index: 10; }
 
         h1 { color: #c9184a; font-size: 2.5rem; text-shadow: 2px 2px white; }
         
         #timer {
             font-size: 1.4rem; color: #ff4d6d; background: rgba(255, 255, 255, 0.9);
             padding: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            display: inline-block; margin-top: 20px; line-height: 1.6;
+            display: inline-block; margin-top: 20px;
         }
 
-        /* أنيميشن القلوب */
-        .heart { position: fixed; top: -10%; color: #fff; font-size: 25px; user-select: none; animation: fall linear forwards; z-index: 999; }
-        .main-heart { color: #ff4d6d; } /* القلوب بعد الدخول لونها أحمر */
-
+        .heart { position: fixed; top: -10%; color: white; font-size: 25px; user-select: none; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
         .message { font-size: 1.5rem; color: #590d22; margin-top: 25px; font-weight: bold; }
-        #youtube-player { display: none; }
     </style>
 </head>
 <body>
 
     <div id="password-screen">
-        <h2 style="text-align: center; padding: 0 20px;">دخلي كلمة السر ياروووديي 😂❤️</h2>
-        <input type="password" id="passInput" placeholder="كلمة السر هنا...">
+        <h2 style="text-align: center;">دخلي كلمة السر ياروووديي 😂❤️</h2>
+        <input type="text" id="passInput" placeholder="كلمة السر هنا...">
         <button onclick="checkPassword()">دوسي هنا يقلبي ✨</button>
-        <p id="error" style="display:none; color: #fff3b0; margin-top:15px; font-weight: bold;">كلمة السر غلط يا روحي! 😘</p>
+        <p id="error" style="display:none; color: #fff3b0; margin-top:15px;">كلمة السر غلط! 😘</p>
     </div>
 
     <div id="main-content">
         <h1>أنتي حياتي وكل دنيتي ❤️</h1>
-        <div id="timer">جاري حساب أجمل لحظاتنا...</div>
+        <div id="timer"></div>
+        <p class="message">انتي كل حاجة ليا.. بحبك يا Rodina!</p>
         
-        <p class="message">
-            انتي مش بس حبيبتي، انتي كل حاجة ليا..<br>
-            بحبك يا Rodina!
-        </p>
-
-        <div id="youtube-player">
-            <iframe id="video" width="0" height="0" 
-            src="https://www.youtube.com/embed/T0AA8GvHzhY?enablejsapi=1" 
-            frameborder="0" allow="autoplay"></iframe>
-        </div>
+        <p style="margin-top:20px; color:#ff4d6d;">اسمعي الأغنية من هنا يقلبي 👇</p>
+        <a href="https://youtu.be/T0AA8GvHzhY" target="_blank" style="text-decoration:none; background:#c9184a; color:white; padding:10px 20px; border-radius:20px;">شغلي أغنيتنا 🎵</a>
     </div>
 
     <script>
-        const correctPassword = "rodina"; // كلمة السر بالحروف الصغيرة لسهولة الدخول
-        const startDate = new Date("2025-10-11"); // عداد الـ 4 شهور
-
-        // تشغيل القلوب فور فتح الصفحة
+        // القلوب تبدأ فوراً
         setInterval(createHeart, 300);
 
         function checkPassword() {
-            const input = document.getElementById('passInput').value;
-            // التحويل لصغير للتأكد من الصحة مهما كانت طريقة الكتابة
-            if(input.toLowerCase() === correctPassword) {document.getElementById('password-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('password-screen').style.display = 'none';
-                    document.getElementById('main-content').style.display = 'block';
-                    
-                    // تشغيل الأغنية
-                    const video = document.getElementById('video');
-                    video.src += "&autoplay=1";
-                    
-                    // تغيير لون القلوب لتصبح حمراء بعد الدخول
-                    const hearts = document.getElementsByClassName('heart');
-                    for(let h of hearts) { h.classList.add('main-heart'); }
-                    
-                    updateTimer();
-                    setInterval(updateTimer, 1000);
-                }, 500);
+            const input = document.getElementById('passInput').value.trim().toLowerCase();
+            if(input === "rodina") {
+                document.getElementById('password-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                updateTimer();
+                setInterval(updateTimer, 1000);
             } else {
                 document.getElementById('error').style.display = 'block';
             }
         }
 
         function updateTimer() {
+            const startDate = new Date("2025-10-11");
             const now = new Date();
             const diff = now - startDate;
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -122,20 +91,13 @@
             const seconds = Math.floor((diff / 1000) % 60);
 
             document.getElementById('timer').innerHTML = 
-                بقالنا مع بعض يا روحي: <br> 💖 ${days} يوم و ${hours} ساعة و ${minutes} دقيقة 💖;
-        }
-
-        function createHeart() {
+                بقالنا مع بعض: <br> 💖 ${days} يوم و ${hours} ساعة و ${minutes} دقيقة 💖;
+        }function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            // لو الصفحة لسه مقفولة القلوب بيضاء، لو فتحت تبقى حمراء
-            if (document.getElementById('main-content').style.display === 'block') {
-                heart.classList.add('main-heart');
-            }
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            heart.style.opacity = Math.random() * 0.7 + 0.3;
             document.body.appendChild(heart);
             setTimeout(() => { heart.remove(); }, 5000);
         }
