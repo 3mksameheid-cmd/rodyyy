@@ -86,7 +86,8 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
     <div class="intro-heart" id="introHeart">❤️<span>Rodina</span></div>
 </div>
 
-<div id="player"></div>
+<!-- موسيقى خلفية بدون يوتيوب -->
+<audio id="bgMusic" src="music.mp3" autoplay loop></audio>
 
 <div id="loginScreen" class="screen">
     <div class="glass-card">
@@ -123,9 +124,6 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
     </div>
 </div>
 
-<!-- صوت الجواب فقط -->
-<audio id="letterSound" src="https://freesound.org/data/previews/331/331912_3248245-lq.mp3"></audio>
-
 <script>
 // النجوم
 const canvas = document.getElementById('starField');
@@ -143,19 +141,10 @@ function drawStars() {
 }
 initStars(); drawStars();
 
-// تشغيل الأغنية
-function playMusic() {
-    if(!window.musicPlayed) {
-        document.getElementById('player').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
-        window.musicPlayed = true;
-    }
-}
-
 // القلب الترحيبي يختفي تلقائي
 function popIntroHeart() {
     const heart = document.getElementById('introHeart');
     const overlay = document.getElementById('introOverlay');
-
     if(heart && !window.heartPopped) {
         window.heartPopped = true;
         setTimeout(() => {
@@ -163,7 +152,7 @@ function popIntroHeart() {
             heart.style.transform = 'scale(2.5)';
             heart.style.opacity = '0';
             overlay.style.display = 'none';
-        }, 3000);
+        }, 3000); // 3 ثواني ثم يختفي
     }
 }
 
@@ -207,7 +196,6 @@ function startFalling() {
 }
 
 function openLetterDirect() {
-    document.getElementById('letterSound').play();
     document.getElementById('letterOverlay').style.display = 'flex';
     setTimeout(() => document.getElementById('paper').classList.add('show'), 50);
 }
@@ -217,8 +205,17 @@ function closeLetterDirect() {
     setTimeout(() => document.getElementById('letterOverlay').style.display = 'none', 500);
 }
 
+// عدّاد يبدأ من 12 فبراير فقط
 function updateCounter() {
-    const diff = new Date() - new Date('2025-10-11T00:00:00');
+    const startDate = new Date('2026-02-12T00:00:00');
+    const now = new Date();
+
+    if(now < startDate) {
+        document.getElementById('loveCounter').innerHTML = `العدّاد لم يبدأ بعد ❤️`;
+        return;
+    }
+
+    const diff = now - startDate;
     const d = Math.floor(diff / 86400000);
     const h = Math.floor((diff / 3600000) % 24);
     const m = Math.floor((diff / 60000) % 60);
@@ -232,9 +229,13 @@ function updateCounter() {
 }
 setInterval(updateCounter, 1000);
 
-// تشغيل الموسيقى + القلب الترحيبي عند تحميل الصفحة
+// عند تحميل الصفحة
 window.onload = () => {
-    playMusic();
+    const music = document.getElementById('bgMusic');
+    music.volume = 0.5;
+    music.play().catch(() => {
+        document.body.addEventListener('click', () => music.play());
+    });
     popIntroHeart();
 };
 </script>
