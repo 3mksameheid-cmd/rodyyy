@@ -36,7 +36,6 @@ button{margin-top:15px;padding:12px 22px;border-radius:30px;border:none;backgrou
 
 .leaf{position:absolute;width:12px;height:12px;background:#6f6;border-radius:50%;animation:leafFall linear infinite}
 @keyframes leafFall{to{transform:translateY(110vh) rotate(360deg)}}
-
 </style>
 </head>
 <body>
@@ -52,8 +51,10 @@ button{margin-top:15px;padding:12px 22px;border-radius:30px;border:none;backgrou
 <div id="main" class="screen">
 <div class="counter" id="loveCounter">...</div>
 <div class="tree" onclick="openLetter()"></div>
+
+<!-- الأغنية تشتغل تلقائي -->
 <audio id="bgAudio" loop autoplay>
-  <source src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" type="audio/mpeg">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 </div>
 
@@ -66,11 +67,22 @@ button{margin-top:15px;padding:12px 22px;border-radius:30px;border:none;backgrou
 وجودك خلّى الأيام أهدى وقلبي أريح.  
 أربع شهور مش رقم… دي حياة كاملة اتغيرت بسببك.  
 بحب ضحكتك، طريقتك، هزارك… حتى زعلك.  
-أنا مش بس بحبك… أنا بقيت مطمّن لما بقيتي جزء مني ❤️  
+أنا مش بس بحبك… أنا بقيت مطمّن لما بقيتي جزء مني ❤️
+</p>
+</div>
+</div>
 
-وفي كل يوم بيفوت عليا، بحس إن قلبي بيرقص من الفرحة لما أفكر فيكي.  
+<!-- رسالة ثانية -->
+<div id="secondLetter">
+<div class="box" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);color:#fff;">
+<div class="close" onclick="document.getElementById('secondLetter').style.display='none'">✖</div>
+<h2>رسالة من قلبي ليكي</h2>
+<p>
+بقالنا 4 شهور سوا 💞 وهنفضل سوا للأبد ❤️  
+كل يوم بحس إن قلبي بيرقص من الفرحة لما أفكر فيكي،  
 كل لحظة معاكِ زي حلم جميل، وكل كلمة منك بتنور أيامي.  
-لو كل الدنيا ضدنا، أنا ومفيش حاجة تمنعني أحبك أكثر.  
+لو كل الدنيا ضدنا، أنا ومفيش حاجة تمنعني أحبك أكثر،  
+حياتي من غيرك ملهاش أي معنى… وإنتي سبب كل سعادتي 😢💖
 </p>
 </div>
 </div>
@@ -84,15 +96,18 @@ hearts();
 function leaves(){for(let i=0;i<15;i++){let l=document.createElement('div');l.className='leaf';l.style.left=Math.random()*100+'vw';l.style.animationDuration=6+Math.random()*6+'s';document.body.appendChild(l)}}
 leaves();
 
-// عداد الشهور بشكل حقيقي
+// عداد الشهور والدقائق والثواني بشكل حقيقي
 function updateCounter(){
-  const start = new Date('2025-10-11'); // تاريخ بداية الحب
+  const start = new Date('2025-10-11T00:00:00'); // تاريخ البداية
   const now = new Date();
   const diff = now - start;
   const days = Math.floor(diff / (1000*60*60*24));
   const months = Math.floor(days/30);
-  document.getElementById('months').innerText = `${months} شهور ❤️`;
-  document.getElementById('loveCounter').innerText = `مع بعض من ${months} شهر 💞`;
+  const hours = Math.floor((diff % (1000*60*60*24))/(1000*60*60));
+  const minutes = Math.floor((diff % (1000*60*60))/(1000*60));
+  const seconds = Math.floor((diff % (1000*60))/1000);
+  document.getElementById('months').innerText = `بقالنا ${months} شهر سوا 💞 وهنفضل سوا للأبد ❤️`;
+  document.getElementById('loveCounter').innerText = `بقالنا ${months} شهر سوا 💞 وهنفضل سوا للأبد ❤️`;
 }
 setInterval(updateCounter,1000);
 updateCounter();
@@ -103,13 +118,15 @@ function check(){
     document.getElementById('login').style.display='none';
     document.getElementById('main').style.display='flex';
     document.getElementById('bgAudio').play();
+    // بعد 2 ثانية، تظهر الرسالة الجديدة
+    setTimeout(()=>document.getElementById('secondLetter').style.display='flex',2000);
   } else {
     let w=document.getElementById('wrong'); w.style.opacity=1;
     setTimeout(()=>w.style.opacity=0,1500)
   }
 }
 
-// الرسالة
+// الرسائل
 function openLetter(){document.getElementById('letter').style.display='flex'}
 function closeLetter(){document.getElementById('letter').style.display='none'}
 </script>
