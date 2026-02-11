@@ -8,7 +8,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
 
 html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #05000a; color: #fff; font-family: 'Cairo', sans-serif;}
-#canvas { position: fixed; inset: 0; z-index: -1; }
+
+/* النجوم لازم تكون ثابتة ورا كل حاجة */
+#starsCanvas { position: fixed; inset: 0; z-index: -2; background: #05000a; }
 
 /* تأثير القلب الترحيبي */
 #introHeart {
@@ -39,14 +41,12 @@ button { margin-top: 20px; padding: 10px 30px; border-radius: 50px; border: none
 #letterOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 2000; }
 
 .balloon {
-    position: absolute; top: -150px; width: 120px; height: 150px;
+    position: absolute; top: -200px; width: 100px; height: 120px;
     background: #ff2d75; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2), 0 10px 20px rgba(255,45,117,0.4);
-    z-index: 2100; transition: all 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 20px rgba(255,45,117,0.4); z-index: 2100; transition: top 2s ease-out;
 }
-.balloon::after { content: ''; position: absolute; bottom: -20px; width: 2px; height: 50px; background: #fff; }
-.balloon-text { font-family: 'Dancing Script', cursive; font-size: 24px; color: #fff; text-align: center; }
+.balloon-text { font-family: 'Dancing Script', cursive; font-size: 20px; color: #fff; text-align: center; }
 
 .paper {
     background: #fff; color: #333; width: 85%; max-width: 450px;
@@ -55,15 +55,14 @@ button { margin-top: 20px; padding: 10px 30px; border-radius: 50px; border: none
 }
 .paper.active { opacity: 1; transform: scale(1); }
 
-.falling { position: absolute; top: -50px; pointer-events: none; animation: fall linear forwards; }
+/* العناصر المتساقطة */
+.falling { position: absolute; top: -50px; pointer-events: none; animation: fall linear forwards; z-index: 5;}
 @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
-
-#confetti-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 2200; }
 </style>
 </head>
 <body onclick="playMusic()">
 
-<canvas id="canvas"></canvas>
+<canvas id="starsCanvas"></canvas>
 
 <div id="introHeart">
     <div style="color: #ff2d75; font-size: 150px;">❤️</div>
@@ -84,7 +83,7 @@ button { margin-top: 20px; padding: 10px 30px; border-radius: 50px; border: none
 
 <div id="main" class="screen">
     <div style="font-family:'Dancing Script', cursive; font-size:50px; color:#ff2d75; margin-bottom:10px;">Rodina</div>
-    <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 1px solid #ff2d75; text-align: center;">
+    <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 1px solid #ff2d75; text-align: center; backdrop-filter: blur(5px);">
         <h3>بقالنا مع بعض:</h3>
         <div id="loveCounter" style="font-size: 20px; color: #ff8aa8; font-weight: bold; margin: 10px 0;"></div>
         <button onclick="openLetter()">افتحي الجواب 💌</button>
@@ -93,11 +92,11 @@ button { margin-top: 20px; padding: 10px 30px; border-radius: 50px; border: none
 
 <div id="letterOverlay">
     <div id="balloon" class="balloon">
-        <div class="balloon-text">بحبك<br><span style="font-size:30px">Rodina</span></div>
+        <div class="balloon-text">بحبك<br><span style="font-size:22px">Rodina</span></div>
     </div>
     
     <div class="paper" id="paper">
-        <h2 id="finalName" style="color: #ff2d75; font-family: 'Dancing Script', cursive; opacity: 0;">Rodina ❤️</h2>
+        <h2 id="finalName" style="color: #ff2d75; font-family: 'Dancing Script', cursive; opacity: 0; transition: 0.5s;">Rodina ❤️</h2>
         <p>عارفة يا رودي.. الـ 4 شهور اللي فاتوا دول كانوا أجمل أيام حياتي. كل يوم بكتشف فيكي حاجة تخليني أتأكد إنك أجمل صدفة حصلتلي.</p>
         <p>انتي مش بس حبيبتي، انتي الأمان اللي كنت مستنيه، والضحكة اللي بتنور أيامي الصعبة.</p>
         <p>بوعدك إننا نفضل سوا، نسند بعض ونكبر مع بعض. ربنا يخليكي ليا يا كل دنيتي.</p>
@@ -107,22 +106,34 @@ button { margin-top: 20px; padding: 10px 30px; border-radius: 50px; border: none
 </div>
 
 <script>
-// نجوم الخلفية
-const canvas = document.getElementById('canvas');
+// --- كود النجوم (المظبوط) ---
+const canvas = document.getElementById('starsCanvas');
 const ctx = canvas.getContext('2d');
 let stars = [];
-function init() {
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+function initStars() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     stars = [];
-    for(let i=0; i<100; i++) stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*1.2});
+    for(let i=0; i<150; i++) {
+        stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*1.5 });
+    }
 }
-function animate() {
-    ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = "white";
-    stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill(); s.y += 0.2; if(s.y > canvas.height) s.y = 0; });
-    requestAnimationFrame(animate);
+function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.s, 0, Math.PI*2);
+        ctx.fill();
+        star.y += 0.3;
+        if(star.y > canvas.height) star.y = 0;
+    });
+    requestAnimationFrame(drawStars);
 }
-init(); animate();
+window.addEventListener('resize', initStars);
+initStars(); drawStars();
 
+// --- الموسيقى ---
 let musicStarted = false;
 function playMusic() {
     if(!musicStarted) {
@@ -131,6 +142,7 @@ function playMusic() {
     }
 }
 
+// --- الدخول ---
 function unlock() {
     let p = document.getElementById('pass').value.toLowerCase();
     if(p === 'rodina' || p === 'رودينا') {
@@ -147,61 +159,54 @@ function unlock() {
     }
 }
 
+// --- أنيميشن الجواب ---
 function openLetter() {
-    const overlay = document.getElementById('letterOverlay');
-    const balloon = document.getElementById('balloon');
-    const paper = document.getElementById('paper');
-    const finalName = document.getElementById('finalName');
+    document.getElementById('letterOverlay').style.display = 'flex';
+    const b = document.getElementById('balloon');
+    const p = document.getElementById('paper');
     
-    overlay.style.display = 'flex';
-    paper.classList.add('active');
-    
-    // أنيميشن البالون
     setTimeout(() => {
-        balloon.style.top = '20%'; // ينزل لمكان محدد
+        p.classList.add('active');
+        b.style.top = '25%'; // نزول البالون
         setTimeout(() => {
-            // انفجار البالون
-            balloon.style.transform = 'scale(2)';
-            balloon.style.opacity = '0';
-            // إظهار الاسم ومؤثرات حلوة
-            finalName.style.opacity = '1';
+            b.style.transform = 'scale(2)';
+            b.style.opacity = '0';
+            document.getElementById('finalName').style.opacity = '1';
             createBurst();
         }, 2000);
     }, 100);
 }
 
 function createBurst() {
-    const items = ['❤️', '✨', '🌸', '🎈', '💖'];
     for(let i=0; i<30; i++) {
-        const p = document.createElement('div');
-        p.className = 'falling';
-        p.style.left = (40 + Math.random() * 20) + 'vw';
-        p.style.top = '30vh';
-        p.style.fontSize = '20px';
-        p.style.animationDuration = (Math.random() * 2 + 1) + 's';
-        p.innerHTML = items[Math.floor(Math.random()*items.length)];
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 2000);
+        const item = document.createElement('div');
+        item.className = 'falling';
+        item.innerHTML = ['❤️', '✨', '🌸', '🎈'][Math.floor(Math.random()*4)];
+        item.style.left = (40 + Math.random()*20) + 'vw';
+        item.style.top = '30vh';
+        item.style.fontSize = '20px';
+        item.style.animationDuration = (Math.random()*2 + 1) + 's';
+        document.body.appendChild(item);
+        setTimeout(() => item.remove(), 2000);
     }
 }
 
 function closeLetter() {
     document.getElementById('letterOverlay').style.display = 'none';
-    document.getElementById('balloon').style.top = '-150px';
+    document.getElementById('balloon').style.top = '-200px';
     document.getElementById('balloon').style.opacity = '1';
     document.getElementById('balloon').style.transform = 'scale(1)';
     document.getElementById('finalName').style.opacity = '0';
 }
 
 function startFalling() {
-    const items = ['❤️', '🌹', '🌸'];
     setInterval(() => {
         const div = document.createElement('div');
         div.className = 'falling';
         div.style.left = Math.random() * 100 + 'vw';
         div.style.fontSize = '25px';
         div.style.animationDuration = (Math.random() * 3 + 4) + 's';
-        div.innerHTML = `${items[Math.floor(Math.random()*items.length)]}<span style="font-size:10px; display:block;">Rodina</span>`;
+        div.innerHTML = `❤️<span style="font-size:10px; display:block; color:#fff">Rodina</span>`;
         document.body.appendChild(div);
         setTimeout(() => div.remove(), 7000);
     }, 500);
