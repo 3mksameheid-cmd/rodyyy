@@ -1,80 +1,82 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rodina ❤️</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodina ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
 
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:#05000a; color:#fff; font-family:'Cairo',sans-serif; overflow:hidden; height:100vh; width:100vw; }
-#starField { position:fixed; inset:0; z-index:-1; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#05000a; color:#fff; font-family:'Cairo',sans-serif; overflow:hidden; height:100vh; width:100vw; }
+        #starField { position:fixed; inset:0; z-index:-1; }
 
-/* قلب ترحيبي */
-#introOverlay {
-    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    z-index:9999; background:#05000a;
-}
-.intro-heart {
-    color:#ff2d75; font-size:250px; position:relative;
-    filter: drop-shadow(0 0 40px #ff2d75);
-    animation:heartGrow 3s forwards;
-}
-.intro-heart span {
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    font-family:'Dancing Script',cursive; font-size:45px; color:#fff; text-shadow:0 0 10px #000;
-}
-@keyframes heartGrow {
-    0% { transform: scale(0); opacity:0; }
-    50% { transform: scale(1.2); opacity:1; }
-    100% { transform: scale(2.5); opacity:0; }
-}
+        /* قلب ترحيبي */
+        #introOverlay {
+            position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+            z-index:9999; background:#05000a;
+        }
+        .intro-heart {
+            color:#ff2d75; font-size:250px; position:relative;
+            filter: drop-shadow(0 0 40px #ff2d75);
+            animation:heartGrow 3s forwards;
+        }
+        .intro-heart span {
+            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            font-family:'Dancing Script',cursive; font-size:45px; color:#fff; text-shadow:0 0 10px #000;
+        }
+        @keyframes heartGrow {
+            0% { transform: scale(0); opacity:0; }
+            50% { transform: scale(1.2); opacity:1; }
+            100% { transform: scale(2.5); opacity:0; }
+        }
 
-/* شاشة الدخول */
-.screen { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:10; padding:20px; }
-#mainContent { display:none; opacity:0; transition:1s; }
-.glass-card {
-    background:rgba(255,255,255,0.05); backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,0.1); padding:30px; border-radius:25px;
-    text-align:center; width:100%; max-width:340px;
-}
-input { padding:12px; border-radius:50px; border:2px solid #ff2d75; background:#000; color:#fff; text-align:center; outline:none; width:100%; margin-top:15px; }
-button { margin-top:20px; padding:12px; border-radius:50px; border:none; background:#ff2d75; color:#fff; cursor:pointer; font-weight:bold; width:100%; }
-.developer-tag { margin-top:20px; font-size:12px; color:rgba(255,255,255,0.3); }
+        /* شاشة الدخول */
+        .screen { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:10; padding:20px; }
+        #mainContent { display:none; opacity:0; transition:1s; }
+        .glass-card {
+            background:rgba(255,255,255,0.05); backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.1); padding:30px; border-radius:25px;
+            text-align:center; width:100%; max-width:340px;
+        }
+        input { padding:12px; border-radius:50px; border:2px solid #ff2d75; background:#000; color:#fff; text-align:center; outline:none; width:100%; margin-top:15px; }
+        button { margin-top:20px; padding:12px; border-radius:50px; border:none; background:#ff2d75; color:#fff; cursor:pointer; font-weight:bold; width:100%; }
+        .developer-tag { margin-top:20px; font-size:12px; color:rgba(255,255,255,0.3); }
 
-/* البالونة */
-#mainBalloon {
-    position:absolute; top:-300px; width:100px; height:130px; background:#ff2d75;
-    border-radius:50% 50% 50% 50% / 40% 40% 60% 60%; z-index:50;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    transition:top 2.5s ease-out, opacity 1s ease-out;
-}
-#mainBalloon::after { content:''; position:absolute; bottom:-25px; width:1px; height:35px; background:#fff; }
+        /* البالونة */
+        #mainBalloon {
+            position:absolute; top:-300px; width:100px; height:130px; background:#ff2d75;
+            border-radius:50% 50% 50% 50% / 40% 40% 60% 60%; z-index:50;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            transition:top 2.5s ease-out, opacity 1s ease-out;
+        }
+        #mainBalloon::after { content:''; position:absolute; bottom:-25px; width:1px; height:35px; background:#fff; }
 
-.name-title { font-family:'Dancing Script',cursive; font-size:60px; color:#ff2d75; opacity:0; transition:opacity 1s ease-out, transform 1s ease-out; transform:translateY(20px); margin-bottom:10px; }
+        .name-title { font-family:'Dancing Script',cursive; font-size:60px; color:#ff2d75; opacity:0; transition:opacity 1s ease-out, transform 1s ease-out; transform:translateY(20px); margin-bottom:10px; }
 
-#uiBox { opacity:0; transform:translateY(20px); transition:opacity 1s ease-out, transform 1s ease-out; }
+        #uiBox { opacity:0; transform:translateY(20px); transition:opacity 1s ease-out, transform 1s ease-out; }
 
-/* الجواب */
-#letterOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:4000; padding:20px; }
-.paper {
-    background:#fff; color:#333; width:100%; max-width:500px; padding:35px 25px;
-    border-radius:20px; text-align:center; opacity:0; transform:scale(0.5);
-    transition:transform 0.6s cubic-bezier(0.175,0.885,0.32,1.2), opacity 0.6s;
-    box-shadow:0 0 50px rgba(255,45,117,0.3);
-}
-.paper.show { opacity:1; transform:scale(1); }
+        /* الجواب */
+        #letterOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:4000; padding:20px; }
+        .paper {
+            background:#fff; color:#333; width:100%; max-width:500px; padding:35px 25px;
+            border-radius:20px; text-align:center; opacity:0; transform:scale(0.5);
+            transition:transform 0.6s cubic-bezier(0.175,0.885,0.32,1.2), opacity 0.6s;
+            box-shadow:0 0 50px rgba(255,45,117,0.3);
+        }
+        .paper.show { opacity:1; transform:scale(1); }
 
-/* التساقط */
-.falling { position:absolute; pointer-events:none; z-index:5; animation:fall linear forwards; text-align:center; }
-.falling span { display:block; font-size:10px; color:#ff8aa8; }
-@keyframes fall { to { transform:translateY(110vh) rotate(360deg); } }
-</style>
+        /* التساقط */
+        .falling { position:absolute; pointer-events:none; z-index:5; animation:fall linear forwards; text-align:center; }
+        .falling span { display:block; font-size:10px; color:#ff8aa8; }
+        @keyframes fall { to { transform:translateY(110vh) rotate(360deg); } }
+    </style>
 </head>
 <body>
 
 <canvas id="starField"></canvas>
+
+<div id="musicPlayer"></div>
 
 <div id="introOverlay">
     <div class="intro-heart" id="introHeart">❤️<span>Rodina</span></div>
@@ -83,7 +85,7 @@ button { margin-top:20px; padding:12px; border-radius:50px; border:none; backgro
 <div id="loginScreen" class="screen">
     <div class="glass-card">
         <h2>نورتي يا نن عيني ❤️</h2>
-        <input id="pass" type="password" placeholder="اكتبي اسمك هنا..." />
+        <input id="pass" type="text" placeholder="اكتبي اسمك هنا..." />
         <button onclick="startMagic()">دوسي هنا يا روحي ❤️</button>
         <p class="developer-tag">Designed by Sameh</p>
         <div id="wrong" style="color:#ff8aa8; margin-top:10px; opacity:0; font-size:13px;">الاسم غلط يا رودي.. ركزي 😢</div>
@@ -140,16 +142,30 @@ function drawStars(){
 }
 initStars(); drawStars();
 
-// القلب الترحيبي يختفي تلقائي بعد 3 ثواني
+// القلب الترحيبي
 function popIntroHeart(){
     const overlay=document.getElementById('introOverlay');
     setTimeout(()=>{ overlay.style.display='none'; },3000);
 }
 
-// بدء السحر عند كتابة الاسم
+// دالة تشغيل الأغنية (يتم استدعاؤها عند التفاعل)
+function playMusic() {
+    const musicDiv = document.getElementById('musicPlayer');
+    musicDiv.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY" frameborder="0" allow="autoplay"></iframe>`;
+}
+
+// بدء السحر
+let musicStarted = false;
 function startMagic(){
     let p=document.getElementById('pass').value.toLowerCase();
     if(p==='rodina'||p==='رودينا'){
+        
+        // تشغيل الموسيقى فور الضغط
+        if(!musicStarted){
+            playMusic();
+            musicStarted = true;
+        }
+
         document.getElementById('loginScreen').style.opacity='0';
         setTimeout(()=>{
             document.getElementById('loginScreen').style.display='none';
@@ -174,14 +190,8 @@ function startMagic(){
     }
 }
 
-// تشغيل الأغنية تلقائي
-window.onload = ()=>{
+window.onload = () => {
     popIntroHeart();
-    const iframe=document.createElement('iframe');
-    iframe.width=0; iframe.height=0;
-    iframe.src='https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY';
-    iframe.allow='autoplay';
-    document.body.appendChild(iframe);
 };
 
 // بدء التساقط
@@ -207,9 +217,9 @@ function closeLetterDirect(){
     setTimeout(()=>document.getElementById('letterOverlay').style.display='none',500);
 }
 
-// عداد 4 شهور
+// عداد الحب
 function updateCounter(){
-    const startDate=new Date('2025-10-11T00:00:00'); // بداية العلاقة
+    const startDate=new Date('2025-10-11T00:00:00'); 
     const now=new Date();
     const diff=now-startDate;
     const d=Math.floor(diff/86400000);
