@@ -8,9 +8,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #05000a; color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; height: 100vh; width: 100vw; perspective: 1000px; }
+body { background: #05000a; color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; height: 100vh; width: 100vw; perspective: 1000px; cursor: pointer; }
 
 #starField { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+/* قلب ترحيبي */
+#introOverlay {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:9999; background:#05000a; pointer-events: none;
+}
+.intro-heart {
+    color:#ff2d75; font-size:250px; position:relative;
+    filter: drop-shadow(0 0 40px #ff2d75);
+    animation:heartGrow 3s forwards;
+}
+.intro-heart span {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-family:'Dancing Script',cursive; font-size:45px; color:#fff; text-shadow:0 0 10px #000;
+}
+@keyframes heartGrow {
+    0% { transform: scale(0); opacity:0; }
+    50% { transform: scale(1.2); opacity:1; }
+    100% { transform: scale(2.5); opacity:0; }
+}
 
 /* شاشة الدخول */
 .screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 10; padding: 20px; transition: 0.8s; }
@@ -23,24 +43,23 @@ body { background: #05000a; color: #fff; font-family: 'Cairo', sans-serif; overf
 input { padding: 12px; border-radius: 50px; border: 2px solid #ff2d75; background: #000; color: #fff; text-align: center; outline: none; width: 100%; margin-top: 15px; }
 button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; background: #ff2d75; color: #fff; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; }
 
-/* محتوى الموقع المخفي في البداية */
+/* محتوى الموقع المخفي */
 #mainContent { display: none; opacity: 0; transition: 1s; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
 
-/* البالونة الاحترافية */
+/* البالونة */
 #mainBalloon {
     position: absolute; top: -300px; width: 110px; height: 140px; background: #ff2d75;
     border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; z-index: 50;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2), 0 15px 30px rgba(255,45,117,0.6);
-    transition: top 3s cubic-bezier(0.175, 0.885, 0.32, 1);
+    transition: top 3s cubic-bezier(0.175, 0.885, 0.32, 1), transform 0.5s, opacity 0.5s;
 }
 #mainBalloon::after { content: ''; position: absolute; bottom: -30px; width: 2px; height: 40px; background: rgba(255,255,255,0.6); }
 
-/* الاسم والعداد بعد الانفجار */
 .revealed-ui { opacity: 0; transform: translateY(20px); transition: 1s ease-out; text-align: center; }
 .name-title { font-family: 'Dancing Script', cursive; font-size: 55px; color: #ff2d75; text-shadow: 0 0 20px #ff2d75; margin-bottom: 10px; }
 
-/* الجواب الخطير */
+/* الجواب */
 #letterOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 2000; }
 .envelope {
     width: 280px; height: 180px; background: #ff2d75; position: relative;
@@ -65,6 +84,10 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
 
 <canvas id="starField"></canvas>
 <div id="player"></div>
+
+<div id="introOverlay">
+    <div class="intro-heart" id="introHeart">❤️<span>Rodina</span></div>
+</div>
 
 <div id="loginScreen" class="screen">
     <div class="glass-card">
@@ -121,38 +144,37 @@ function drawStars() {
 }
 initStars(); drawStars();
 
+// تشغيل الموسيقى
 function playMusic() {
     if(!window.musicPlayed) {
-        document.getElementById('player').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
+        document.getElementById('player').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY" frameborder="0" allow="autoplay"></iframe>`;
         window.musicPlayed = true;
     }
 }
 
-// البداية السحرية
+// قلب الترحيب يختفي
+setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 3000);
+
 function magicStart() {
     let p = document.getElementById('pass').value.toLowerCase();
     if(p === 'rodina' || p === 'رودينا') {
-        // إخفاء الدخول
+        playMusic(); // تشغيل الموسيقى عند الدخول كخيار إضافي
         document.getElementById('loginScreen').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('loginScreen').style.display = 'none';
-            // إظهار المحتوى الرئيسي بس وهو "فاضي"
             const mc = document.getElementById('mainContent');
             mc.style.display = 'flex';
             setTimeout(() => mc.style.opacity = '1', 50);
 
-            // بعد ثانية تنزل البالونة
             setTimeout(() => {
                 const b = document.getElementById('mainBalloon');
                 b.style.top = '15%'; 
                 
-                // بعد ما توصل تنفجر ويظهر العداد والاسم
                 setTimeout(() => {
                     b.style.transform = 'scale(2.5)';
                     b.style.opacity = '0';
                     createBurst();
                     
-                    // إظهار العداد والاسم بنعومة
                     const ui = document.getElementById('uiReveal');
                     ui.style.opacity = '1';
                     ui.style.transform = 'translateY(0)';
@@ -186,7 +208,6 @@ function startFalling() {
     }, 600);
 }
 
-// أنيميشن الجواب الخطير
 function openEnvelope() {
     document.getElementById('letterOverlay').style.display = 'flex';
 }
@@ -195,9 +216,7 @@ function revealPaper() {
     const env = document.getElementById('env');
     const paper = document.getElementById('paper');
     env.classList.add('open');
-    setTimeout(() => {
-        paper.classList.add('show');
-    }, 500);
+    setTimeout(() => { paper.classList.add('show'); }, 500);
 }
 
 function closeLetter() {
