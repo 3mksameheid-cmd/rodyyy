@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rodina ❤️</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
@@ -12,7 +12,7 @@ body { background: #05000a; color: #fff; font-family: 'Cairo', sans-serif; overf
 
 #starField { position: fixed; inset: 0; z-index: -1; }
 
-/* قلب ترحيبي بنبض طبيعي */
+/* قلب ترحيبي */
 #introOverlay {
     position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
     z-index: 9999; background: #05000a;
@@ -58,9 +58,9 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
 }
 #mainBalloon::after { content: ''; position: absolute; bottom: -25px; width: 1px; height: 35px; background: #fff; }
 
-.name-title { font-family: 'Dancing Script', cursive; font-size: 60px; color: #ff2d75; opacity: 0; transition: opacity 1s ease-out, transform 1s ease-out; transform: translateY(0); margin-bottom: 10px; }
+.name-title { font-family: 'Dancing Script', cursive; font-size: 60px; color: #ff2d75; opacity: 0; transition: opacity 1s ease-out, transform 1s ease-out; transform: translateY(20px); margin-bottom: 10px; }
 
-#uiBox { opacity:0; transform: translateY(0); transition: opacity 1s ease-out, transform 1s ease-out; }
+#uiBox { opacity:0; transform: translateY(20px); transition: opacity 1s ease-out, transform 1s ease-out; }
 
 /* الجواب المباشر */
 #letterOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 4000; padding: 20px; }
@@ -123,6 +123,7 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
     </div>
 </div>
 
+<!-- أصوات -->
 <audio id="popSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
 <audio id="letterSound" src="https://freesound.org/data/previews/331/331912_3248245-lq.mp3"></audio>
 
@@ -143,7 +144,15 @@ function drawStars() {
 }
 initStars(); drawStars();
 
-// القلب الترحيبي يختفي تلقائي بعد 3 ثواني
+// تشغيل الأغنية
+function playMusic() {
+    if(!window.musicPlayed) {
+        document.getElementById('player').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
+        window.musicPlayed = true;
+    }
+}
+
+// القلب الترحيبي يختفي تلقائي
 function popIntroHeart() {
     const heart = document.getElementById('introHeart');
     const overlay = document.getElementById('introOverlay');
@@ -152,10 +161,7 @@ function popIntroHeart() {
     if(heart && !window.heartPopped) {
         window.heartPopped = true;
 
-        // صوت انفجار القلب
-        setTimeout(() => popSound.play(), 1500);
-
-        // يظهر 3 ثواني ثم يختفي بسلاسة
+        setTimeout(() => popSound.play(), 1500); // صوت الفرقعة
         setTimeout(() => {
             heart.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
             heart.style.transform = 'scale(2.5)';
@@ -221,8 +227,7 @@ function startFalling() {
 }
 
 function openLetterDirect() {
-    const letterSound = document.getElementById('letterSound');
-    letterSound.play();
+    document.getElementById('letterSound').play();
     document.getElementById('letterOverlay').style.display = 'flex';
     setTimeout(() => document.getElementById('paper').classList.add('show'), 50);
 }
@@ -247,8 +252,11 @@ function updateCounter() {
 }
 setInterval(updateCounter, 1000);
 
-// شغّل القلب الترحيبي تلقائي عند تحميل الصفحة
-window.onload = popIntroHeart;
+// تشغيل الموسيقى + القلب الترحيبي عند تحميل الصفحة
+window.onload = () => {
+    playMusic();
+    popIntroHeart();
+};
 </script>
 </body>
 </html>
