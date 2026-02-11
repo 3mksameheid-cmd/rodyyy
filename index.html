@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى حياتي ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffe6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* شاشة قفل كلمة السر */
+        #password-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #ff4d6d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            transition: 0.8s;
+        }
+
+        input {
+            padding: 12px;
+            border-radius: 25px;
+            border: 2px solid white;
+            margin-top: 15px;
+            text-align: center;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 10px 30px;
+            margin-top: 15px;
+            border-radius: 25px;
+            border: none;
+            background: white;
+            color: #ff4d6d;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* المحتوى الرئيسي */
+        #main-content {
+            display: none;
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 { color: #c9184a; font-size: 2.5rem; text-shadow: 2px 2px white; }
+        
+        #timer {
+            font-size: 1.4rem;
+            color: #ff4d6d;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        /* القلوب المتساقطة */
+        .heart {
+            position: fixed;
+            top: -10%;
+            color: #ff4d6d;
+            font-size: 20px;
+            user-select: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        .message {
+            font-size: 1.5rem;
+            color: #590d22;
+            margin-top: 25px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="password-screen">
+        <h2>أدخلي كلمة السر يا Rodina ❤️</h2>
+        <input type="password" id="passInput" placeholder="اكتبي كلمة السر هنا...">
+        <button onclick="checkPassword()">افتحي المفاجأة ✨</button>
+        <p id="error" style="display:none; color: yellow; margin-top:15px;">كلمة السر غلط يا روحي، حاولي تاني! 😘</p>
+    </div>
+
+    <div id="main-content">
+        <h1>أنتي حياتي وكل دنيتي ❤️</h1>
+        <div id="timer">جاري حساب أيامنا...</div>
+        
+        <p class="message">
+            انتي مش بس حبيبتي، انتي كل حاجة ليا..<br>
+            بحبك يا Rodina!
+        </p>
+
+        <div style="margin-top: 20px;">
+            <audio id="bgMusic" loop controls>
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+
+    <script>
+        const correctPassword = "Rodina"; // كلمة السر المطلوبة
+        const startDate = new Date("2025-10-11"); // تاريخ البداية (4 شهور من اليوم)
+
+        function checkPassword() {
+            const input = document.getElementById('passInput').value;
+            if(input === correctPassword) {
+                document.getElementById('password-screen').style.opacity = '0';
