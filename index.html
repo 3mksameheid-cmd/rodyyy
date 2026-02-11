@@ -13,7 +13,7 @@ body{margin:0;overflow:hidden;background:#000;color:#fff}
 #main{display:none;background:linear-gradient(#070014,#000)}
 input{padding:12px 18px;border-radius:30px;border:none;font-size:18px;text-align:center}
 button{margin-top:15px;padding:12px 22px;border-radius:30px;border:none;background:#ff2d75;color:#fff;font-size:18px;cursor:pointer;box-shadow:0 0 15px #ff2d75}
-#wrong{color:#ff8aa8;margin-top:8px;opacity:0}
+#wrong{color:#ff8aa8;margin-top:8px;opacity:0;transition:opacity .3s}
 .counter{position:absolute;top:20px;font-size:22px;opacity:.8}
 
 /* hearts */
@@ -24,23 +24,25 @@ button{margin-top:15px;padding:12px 22px;border-radius:30px;border:none;backgrou
 @keyframes fall{to{transform:translateY(110vh) rotate(45deg)}}
 
 /* tree */
-.tree{width:200px;height:260px;border-radius:100px 100px 20px 20px;background:linear-gradient(#1a3,#0a2);position:relative;margin-top:80px;box-shadow:0 0 40px #0f5}
+.tree{width:200px;height:260px;border-radius:100px 100px 20px 20px;background:linear-gradient(#1a3,#0a2);position:relative;margin-top:80px;box-shadow:0 0 40px #0f5;cursor:pointer;transition:transform .3s}
+.tree:hover{transform:scale(1.05) rotate(-2deg)}
 .tree:after{content:'Rodina';position:absolute;bottom:40px;left:50%;transform:translateX(-50%);font-size:28px;color:#fff;text-shadow:0 0 10px #fff}
 
 /* letter */
-#letter{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center}
+#letter{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center}
 .box{background:#fff;color:#000;max-width:500px;padding:30px;border-radius:20px;position:relative;animation:glow 2s infinite alternate}
 @keyframes glow{from{box-shadow:0 0 20px #fff}to{box-shadow:0 0 50px #ffd}}
 .close{position:absolute;top:10px;left:15px;font-size:22px;cursor:pointer}
 
 .leaf{position:absolute;width:12px;height:12px;background:#6f6;border-radius:50%;animation:leafFall linear infinite}
 @keyframes leafFall{to{transform:translateY(110vh) rotate(360deg)}}
+
 </style>
 </head>
 <body>
 
 <div id="login" class="screen">
-<div class="counter" id="months">4 شهور حب ❤️</div>
+<div class="counter" id="months">...</div>
 <h2>اكتبي كلمة المرور ياروديي</h2>
 <input id="pass" type="password" placeholder="اسمك" />
 <button onclick="check()">دوسي علي قلبي</button>
@@ -48,9 +50,11 @@ button{margin-top:15px;padding:12px 22px;border-radius:30px;border:none;backgrou
 </div>
 
 <div id="main" class="screen">
-<div class="counter">مع بعض من 4 شهور 💞</div>
+<div class="counter" id="loveCounter">...</div>
 <div class="tree" onclick="openLetter()"></div>
-<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&mute=1&loop=1&playlist=T0AA8GvHzhY"></iframe>
+<audio id="bgAudio" loop autoplay>
+  <source src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" type="audio/mpeg">
+</audio>
 </div>
 
 <div id="letter">
@@ -58,26 +62,57 @@ button{margin-top:15px;padding:12px 22px;border-radius:30px;border:none;backgrou
 <div class="close" onclick="closeLetter()">✖</div>
 <h2>إلي أجمل حاجة حصلتلي</h2>
 <p>
-من أول يوم كلمتيني وأنا حاسس إنك مش شخص عادي…
-وجودك خلّى الأيام أهدى وقلبي أريح.
-أربع شهور مش رقم… دي حياة كاملة اتغيرت بسببك.
-بحب ضحكتك، طريقتك، هزارك… حتى زعلك.
-أنا مش بس بحبك… أنا بقيت مطمّن لما بقيتي جزء مني ❤️
+من أول يوم كلمتيني وأنا حاسس إنك مش شخص عادي…  
+وجودك خلّى الأيام أهدى وقلبي أريح.  
+أربع شهور مش رقم… دي حياة كاملة اتغيرت بسببك.  
+بحب ضحكتك، طريقتك، هزارك… حتى زعلك.  
+أنا مش بس بحبك… أنا بقيت مطمّن لما بقيتي جزء مني ❤️  
+
+وفي كل يوم بيفوت عليا، بحس إن قلبي بيرقص من الفرحة لما أفكر فيكي.  
+كل لحظة معاكِ زي حلم جميل، وكل كلمة منك بتنور أيامي.  
+لو كل الدنيا ضدنا، أنا ومفيش حاجة تمنعني أحبك أكثر.  
 </p>
 </div>
 </div>
 
 <script>
+// قلوب
 function hearts(){for(let i=0;i<20;i++){let h=document.createElement('div');h.className='heart';h.style.left=Math.random()*100+'vw';h.style.animationDuration=5+Math.random()*5+'s';document.body.appendChild(h)}}
 hearts();
 
+// أوراق
 function leaves(){for(let i=0;i<15;i++){let l=document.createElement('div');l.className='leaf';l.style.left=Math.random()*100+'vw';l.style.animationDuration=6+Math.random()*6+'s';document.body.appendChild(l)}}
 leaves();
 
-function check(){if(document.getElementById('pass').value.toLowerCase()==='rodina'){document.getElementById('login').style.display='none';document.getElementById('main').style.display='flex'}else{let w=document.getElementById('wrong');w.style.opacity=1;setTimeout(()=>w.style.opacity=0,1500)}}
+// عداد الشهور بشكل حقيقي
+function updateCounter(){
+  const start = new Date('2025-10-11'); // تاريخ بداية الحب
+  const now = new Date();
+  const diff = now - start;
+  const days = Math.floor(diff / (1000*60*60*24));
+  const months = Math.floor(days/30);
+  document.getElementById('months').innerText = `${months} شهر حب ❤️`;
+  document.getElementById('loveCounter').innerText = `مع بعض من ${months} شهر 💞`;
+}
+setInterval(updateCounter,1000);
+updateCounter();
 
+// كلمة السر
+function check(){
+  if(document.getElementById('pass').value.toLowerCase()==='rodina'){
+    document.getElementById('login').style.display='none';
+    document.getElementById('main').style.display='flex';
+    document.getElementById('bgAudio').play();
+  } else {
+    let w=document.getElementById('wrong'); w.style.opacity=1;
+    setTimeout(()=>w.style.opacity=0,1500)
+  }
+}
+
+// الرسالة
 function openLetter(){document.getElementById('letter').style.display='flex'}
 function closeLetter(){document.getElementById('letter').style.display='none'}
 </script>
+
 </body>
 </html>
