@@ -123,8 +123,7 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
     </div>
 </div>
 
-<!-- أصوات -->
-<audio id="popSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3"></audio>
+<!-- صوت الجواب فقط -->
 <audio id="letterSound" src="https://freesound.org/data/previews/331/331912_3248245-lq.mp3"></audio>
 
 <script>
@@ -156,18 +155,14 @@ function playMusic() {
 function popIntroHeart() {
     const heart = document.getElementById('introHeart');
     const overlay = document.getElementById('introOverlay');
-    const popSound = document.getElementById('popSound');
 
     if(heart && !window.heartPopped) {
         window.heartPopped = true;
-
-        setTimeout(() => popSound.play(), 1500); // صوت الفرقعة
         setTimeout(() => {
             heart.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
             heart.style.transform = 'scale(2.5)';
             heart.style.opacity = '0';
-            createBurst(window.innerWidth/2, window.innerHeight/2, 50);
-            setTimeout(() => overlay.style.display = 'none', 1000);
+            overlay.style.display = 'none';
         }, 3000);
     }
 }
@@ -190,7 +185,6 @@ function startMagic() {
                     document.getElementById('revealedName').style.transform = 'translateY(0)';
                     document.getElementById('uiBox').style.opacity = '1';
                     document.getElementById('uiBox').style.transform = 'translateY(0)';
-                    createBurst(window.innerWidth/2, window.innerHeight*0.2, 30);
                     startFalling();
                 }, 3000);
             }, 500);
@@ -198,20 +192,6 @@ function startMagic() {
     } else {
         document.getElementById('wrong').style.opacity = '1';
         setTimeout(() => document.getElementById('wrong').style.opacity = '0', 2000);
-    }
-}
-
-function createBurst(x, y, count=30) {
-    for(let i=0; i<count; i++) {
-        const d = document.createElement('div');
-        d.className = 'falling';
-        d.innerHTML = '❤️';
-        d.style.left = x + (Math.random()*100 - 50) + 'px';
-        d.style.top = y + (Math.random()*100 - 50) + 'px';
-        d.style.fontSize = (10 + Math.random()*20) + 'px';
-        d.style.animationDuration = (1 + Math.random()) + 's';
-        document.body.appendChild(d);
-        setTimeout(() => d.remove(), 2000);
     }
 }
 
