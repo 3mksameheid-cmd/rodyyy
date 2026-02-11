@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>إلى رودينا.. نبض قلبي ❤️</title>
+<title>إلى رودينا.. ملكة قلبي ❤️</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
 
 *{box-sizing:border-box; margin:0; padding:0; font-family:'Cairo',sans-serif}
-body{background:#05000a; color:#fff; overflow:hidden; height:100vh; position: relative; cursor: default;}
+body{background:#05000a; color:#fff; overflow:hidden; height:100vh; perspective: 1500px;}
 
-#canvas {position:fixed; inset:0; z-index:-2} /* نجوم في الخلفية خالص */
+/* خلفية النجوم */
+#canvas {position:fixed; inset:0; z-index:-2}
 
 .screen{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:10; transition:all 0.8s ease}
 #main{display:none; opacity:0;}
@@ -18,98 +19,82 @@ body{background:#05000a; color:#fff; overflow:hidden; height:100vh; position: re
 /* القلب العملاق في البداية */
 #introHeart {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
-    color: #ff2d75; font-size: 250px; text-shadow: 0 0 50px rgba(255,45,117,0.7);
-    opacity: 0; z-index: 5; animation: revealHeart 2s forwards ease-out 1s; /* يظهر بعد ثانية */
-    pointer-events: none;
-    display: flex; align-items: center; justify-content: center;
+    color: #ff2d75; font-size: 200px; text-shadow: 0 0 50px rgba(255,45,117,0.7);
+    opacity: 0; z-index: 5; animation: revealHeart 2.5s forwards ease-out 0.5s;
 }
-#introHeart span { font-family: 'Dancing Script', cursive; font-size: 60px; color: #fff; text-shadow: 0 0 20px #fff;}
+#introHeart span { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family: 'Dancing Script', cursive; font-size: 50px; color: #fff; text-shadow: 0 0 15px #fff;}
 
 @keyframes revealHeart {
     0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    80% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    50% { opacity: 1; }
     100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 40px; border-radius: 30px; text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    z-index: 20;
-    opacity: 0; /* يبدأ مخفي */
-    animation: fadeInCard 1s forwards 3s ease-out; /* يظهر بعد القلب */
+    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 30px; 
+    text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    opacity: 0; animation: fadeInCard 1s forwards 3s;
 }
-@keyframes fadeInCard {
-    to { opacity: 1; }
-}
+@keyframes fadeInCard { to { opacity: 1; } }
 
 input{
-    padding:15px 25px; border-radius:50px; border:2px solid #ff2d75;
-    background:rgba(0,0,0,0.5); color:#fff; font-size:18px; text-align:center;
-    outline:none; width:250px;
+    padding:15px; border-radius:50px; border:2px solid #ff2d75;
+    background:rgba(0,0,0,0.5); color:#fff; font-size:18px; text-align:center; outline:none; width:260px;
 }
-
 button{
     margin-top:20px; padding:12px 40px; border-radius:50px; border:none;
     background:linear-gradient(45deg, #ff2d75, #ff8aa8); color:#fff;
     font-size:20px; cursor:pointer; font-weight:bold; box-shadow:0 10px 20px rgba(255,45,117,0.3);
 }
 
-/* تساقط الورد والقلوب */
-.falling-element {
-    position: absolute; top: -50px; pointer-events: none; z-index: 5;
-    animation: fallAnim linear forwards;
-    white-space: nowrap; /* عشان الاسم ميتكسرش */
+/* التساقط المستمر */
+.falling-item {
+    position: absolute; top: -100px; pointer-events: none; z-index: 5;
+    animation: fall linear forwards;
 }
+@keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
 
-@keyframes fallAnim {
-    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+/* الجواب الأنيميشن */
+#letterOverlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    display: none; align-items: center; justify-content: center; z-index: 2000;
 }
-
-.name-tag {
-    font-family: 'Dancing Script', cursive; font-size: 60px;
-    background: linear-gradient(to right, #fff, #ff2d75);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 15px rgba(255,45,117,0.8));
-    animation: pulse 3s infinite ease-in-out;
-    margin-bottom: 30px;
+.envelope {
+    width: 300px; height: 200px; background: #ff2d75; position: relative;
+    cursor: pointer; transition: transform 0.8s; transform-style: preserve-3d;
 }
+.envelope.open { transform: rotateY(180deg) scale(1.2); }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.05); opacity: 1; }
+.letter-content {
+    position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    z-index: 2100; opacity: 0; transition: 1s;
 }
-
-#loveCounter { font-size: 22px; font-weight: bold; color: #ff8aa8; text-shadow: 0 0 10px rgba(255,45,117,0.5); }
-
-/* الجواب */
-#letter{position:fixed; inset:0; background:rgba(0,0,0,0.9); display:none; align-items:center; justify-content:center; z-index:1000}
-.letter-box {
-    background: #fff; color: #333; width: 90%; max-width: 550px; /* زودنا العرض شوية */
-    padding: 40px; border-radius: 30px; position: relative; text-align: center;
-    box-shadow: 0 0 80px rgba(255,45,117,0.6);
+.paper {
+    background: #fff; color: #333; width: 90%; max-width: 500px;
+    padding: 40px; border-radius: 15px; position: relative;
+    box-shadow: 0 0 50px rgba(255,255,255,0.2); text-align: center;
 }
-.letter-box h2 { color: #ff2d75; font-size: 32px; margin-bottom: 20px; font-family: 'Dancing Script', cursive; }
-.letter-box p { font-size: 19px; line-height: 1.8; margin-bottom: 15px; }
+.paper h2 { color: #ff2d75; margin-bottom: 20px; font-family: 'Dancing Script', cursive; font-size: 35px; }
+.paper p { font-size: 18px; line-height: 1.8; color: #444; border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 10px; }
+
+.close-p { position: absolute; top: 10px; left: 15px; cursor: pointer; font-size: 25px; color: #ff2d75; }
+
+.name-tag { font-family: 'Dancing Script', cursive; font-size: 60px; color: #ff2d75; text-shadow: 0 0 15px #fff; margin-bottom: 20px;}
 </style>
 </head>
 <body onclick="playMusic()">
 
 <canvas id="canvas"></canvas>
 
-<div id="introHeart">
-    ❤️<span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">Rodina</span>
-</div>
+<div id="introHeart">❤️<span>Rodina</span></div>
 
 <div id="player"></div>
 
 <div id="login" class="screen">
     <div class="glass-card">
-        <h1 style="margin-bottom:20px;">وحشتيني يا رودينا ❤️</h1>
-        <p style="font-size: 14px; margin-bottom: 10px; color: #ff8aa8;">(اضغطي في أي مكان لتشغيل الموسيقى)</p>
-        <input id="pass" type="password" placeholder="اكتبي اسمك هنا..." />
+        <h1 style="margin-bottom:20px;">نورتي يا نن عيني ❤️</h1>
+        <input id="pass" type="password" placeholder="اسمك السكر..." />
         <br>
         <button onclick="unlock()">دوسي يا قلبي ❤️</button>
         <div id="wrong" style="color:#ff8aa8; margin-top:15px; opacity:0">الاسم غلط.. ركزي يا روحي 😢</div>
@@ -118,96 +103,86 @@ button{
 
 <div id="main" class="screen">
     <div class="name-tag">Rodina</div>
-    <div style="background: rgba(0,0,0,0.4); padding: 30px; border-radius: 30px; border: 1px solid #ff2d75; text-align: center;">
-        <h2 style="margin-bottom:15px;">يا كل أيامي.. مر على حبنا:</h2>
-        <div id="loveCounter"></div>
-        <button onclick="showLetter()" style="margin-top:25px; font-size:17px;">رسالة من أعماق قلبي 💌</button>
+    <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 30px; border: 1px solid #ff2d75; text-align: center; backdrop-filter: blur(10px);">
+        <h2 style="margin-bottom:15px;">بقالنا مع بعض:</h2>
+        <div id="loveCounter" style="font-size: 24px; color: #ff8aa8; font-weight: bold;"></div>
+        <button onclick="openEnvelopeAnim()" style="margin-top:25px;">افتحي الجواب 💌</button>
     </div>
 </div>
 
-<div id="letter">
-    <div class="letter-box">
-        <span style="position:absolute; top:15px; left:20px; cursor:pointer; font-size:30px; color:#ff2d75;" onclick="hideLetter()">×</span>
-        <h2>يا رودينا.. يا نجمة حياتي الساطعة ✨</h2>
-        <p>
-            من أول لحظة دخلتي فيها حياتي، قلبي عرف إنه لقى اللي كان بيدور عليه. <br>
-            مش مجرد 4 شهور اللي فاتوا، دي حياة كاملة اتلونت بأجمل الألوان بوجودك. <br>
-            كل ضحكة، كل كلمة، كل نظرة منك بتطمني وبتخليني أحس إني في الجنة. <br><br>
-            انتي مش بس حبيبتي، انتي سري وأماني، وملجئي من كل حاجة في الدنيا. <br>
-            عمري ما تخيلت إن فيه حب بالجمال ده ممكن يغير حياة بني آدم للدرجة دي. <br>
-            ربنا يديمك نعمة في حياتي، ويفضل حبك منور قلبي ومخلي أيامي أحلى. <br><br>
-            <b>أنا بعشقك يا رودي، بحبك بكل معاني الكلمة.. وللأبد ❤️</b>
-        </p>
+<div id="letterOverlay">
+    <div class="envelope" id="env" onclick="revealLetter()">
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 50px;">✉️</div>
+    </div>
+</div>
+
+<div class="letter-content" id="letter">
+    <div class="paper">
+        <span class="close-p" onclick="closeAll()">×</span>
+        <h2>لأغلى إنسانة.. رودينا ❤️</h2>
+        <p>عارفة يا رودي.. الـ 4 شهور اللي فاتوا دول كانوا بمثابة عُمر جديد ليا. كل يوم بكتشف فيكي حاجة تخليني أحبك أكتر.</p>
+        <p>انتي مش بس نصي التاني، انتي كلي. انتي الضحكة اللي بتطلع من قلبي، وانتي الأمان اللي كنت مستنيه طول عمري.</p>
+        <p>وجودك جنبي هو أعظم هدية جاتلي، وبوعدك إننا هنفضل سوا، ونكبر سوا، ونحقق كل أحلامنا مع بعض.</p>
+        <p><b>بحبك يا نن عيني.. ولآخر يوم في عمري. ❤️</b></p>
+        <p style="font-size: 14px; color: #999;">مع كل دقة في قلبي.. حبيبك</p>
     </div>
 </div>
 
 <script>
-// --- إعدادات خلفية النجوم ---
+// نجوم الخلفية
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 let stars = [];
-function initCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+function init() {
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     stars = [];
-    for(let i=0; i<150; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5});
+    for(let i=0; i<150; i++) stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*1.5});
 }
-function drawStars() {
-    ctx.clearRect(0,0,canvas.width, canvas.height);
+function animate() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = "white";
     stars.forEach(s => {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
-        ctx.fill();
-        s.y += 0.3; /* سرعة النجوم بطيئة جداً */
-        if(s.y > canvas.height) s.y = 0;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill();
+        s.y += 0.2; if(s.y > canvas.height) s.y = 0;
     });
-    requestAnimationFrame(drawStars);
+    requestAnimationFrame(animate);
 }
-window.addEventListener('resize', initCanvas);
-initCanvas(); drawStars();
+init(); animate();
 
-// --- تشغيل الموسيقى بعد أول تفاعل ---
+// الموسيقى
 let musicStarted = false;
 function playMusic() {
     if(!musicStarted) {
-        const player = document.getElementById('player');
-        player.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
+        document.getElementById('player').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1" frameborder="0" allow="autoplay"></iframe>`;
         musicStarted = true;
     }
 }
 
-// --- المؤثرات المتساقطة (قلوب وورد باسمها) ---
-function createFallingElements() {
-    const elements = ['❤️', '🌹', '🌸', '🌷', '💖', '✨'];
-    for(let i=0; i<70; i++) { // عدد كبير جداً عشان الاحتفالية
-        setTimeout(() => {
-            const div = document.createElement('div');
-            div.className = 'falling-element';
-            div.style.left = Math.random() * 100 + 'vw';
-            div.style.fontSize = (Math.random() * 20 + 20) + 'px';
-            div.style.animationDuration = (Math.random() * 3 + 5) + 's';
-            
-            const content = elements[Math.floor(Math.random()*elements.length)];
-            div.innerHTML = `${content}<span style="font-size:10px; display:block; color:#fff;">Rodina</span>`;
-            
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 8000);
-        }, i * 30); // فاصل زمني بسيط لخلق تأثير الانفجار
-    }
+// تساقط مستمر (ورد وقلوب)
+function startFalling() {
+    const items = ['❤️', '🌹', '🌸', '🌷', '💖'];
+    setInterval(() => {
+        const div = document.createElement('div');
+        div.className = 'falling-item';
+        div.style.left = Math.random() * 100 + 'vw';
+        div.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        div.style.animationDuration = (Math.random() * 3 + 5) + 's';
+        div.innerHTML = `${items[Math.floor(Math.random()*items.length)]}<span style="font-size:10px; display:block; color:#fff;">Rodina</span>`;
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 8000);
+    }, 400);
 }
 
-// --- وظيفة فتح الموقع بعد كلمة السر ---
 function unlock() {
     let p = document.getElementById('pass').value.toLowerCase();
     if(p === 'rodina' || p === 'رودينا') {
         document.getElementById('login').style.opacity = '0';
-        document.getElementById('introHeart').style.display = 'none'; // نخفي القلب اللي ظهر في الأول
+        document.getElementById('introHeart').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('login').style.display = 'none';
             document.getElementById('main').style.display = 'flex';
             setTimeout(() => document.getElementById('main').style.opacity = '1', 50);
-            createFallingElements(); // نبدأ المؤثرات المتساقطة كلها مرة واحدة
+            startFalling();
         }, 800);
     } else {
         document.getElementById('wrong').style.opacity = '1';
@@ -215,7 +190,33 @@ function unlock() {
     }
 }
 
-// --- العداد التفاعلي ---
+// أنيميشن الجواب
+function openEnvelopeAnim() {
+    document.getElementById('letterOverlay').style.display = 'flex';
+}
+
+function revealLetter() {
+    document.getElementById('env').classList.add('open');
+    setTimeout(() => {
+        document.getElementById('letterOverlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('letterOverlay').style.display = 'none';
+            const l = document.getElementById('letter');
+            l.style.display = 'flex';
+            setTimeout(() => l.style.opacity = '1', 50);
+        }, 500);
+    }, 1000);
+}
+
+function closeAll() {
+    document.getElementById('letter').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('letter').style.display = 'none';
+        document.getElementById('env').classList.remove('open');
+    }, 500);
+}
+
+// العداد
 function updateCounter() {
     const start = new Date('2025-10-11T00:00:00');
     const now = new Date();
@@ -227,9 +228,6 @@ function updateCounter() {
     document.getElementById('loveCounter').innerHTML = `${d} يوم، ${h} ساعة، ${m} دقيقة، ${s} ثانية`;
 }
 setInterval(updateCounter, 1000);
-
-function showLetter() { document.getElementById('letter').style.display = 'flex'; }
-function hideLetter() { document.getElementById('letter').style.display = 'none'; }
 </script>
 </body>
 </html>
