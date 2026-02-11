@@ -86,8 +86,8 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
     <div class="intro-heart" id="introHeart">❤️<span>Rodina</span></div>
 </div>
 
-<!-- موسيقى خلفية بدون يوتيوب -->
-<audio id="bgMusic" src="music.mp3" autoplay loop></audio>
+<!-- مشغل يوتيوب مخفي -->
+<div id="player" style="display:none;"></div>
 
 <div id="loginScreen" class="screen">
     <div class="glass-card">
@@ -178,9 +178,25 @@ function startMagic() {
                 }, 3000);
             }, 500);
         }, 800);
+
+        // تشغيل الموسيقى من يوتيوب بعد أول نقرة
+        playMusic();
+
     } else {
         document.getElementById('wrong').style.opacity = '1';
         setTimeout(() => document.getElementById('wrong').style.opacity = '0', 2000);
+    }
+}
+
+// الموسيقى يوتيوب
+function playMusic() {
+    if(!window.musicPlayed) {
+        document.getElementById('player').innerHTML = `
+            <iframe width="0" height="0"
+                src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY"
+                frameborder="0" allow="autoplay" allowfullscreen>
+            </iframe>`;
+        window.musicPlayed = true;
     }
 }
 
@@ -230,14 +246,7 @@ function updateCounter() {
 setInterval(updateCounter, 1000);
 
 // عند تحميل الصفحة
-window.onload = () => {
-    const music = document.getElementById('bgMusic');
-    music.volume = 0.5;
-    music.play().catch(() => {
-        document.body.addEventListener('click', () => music.play());
-    });
-    popIntroHeart();
-};
+window.onload = popIntroHeart;
 </script>
 </body>
 </html>
