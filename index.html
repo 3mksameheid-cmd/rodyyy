@@ -48,11 +48,13 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
     position: absolute; top: -300px; width: 100px; height: 130px; background: #ff2d75;
     border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; z-index: 50;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: top 3s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    transition: top 3s ease-out; /* تم إزالة scale الهزّة */
 }
 #mainBalloon::after { content: ''; position: absolute; bottom: -25px; width: 1px; height: 35px; background: #fff; }
 
-.name-title { font-family: 'Dancing Script', cursive; font-size: 60px; color: #ff2d75; opacity: 0; transform: scale(0.5); transition: 1s; margin-bottom: 10px; }
+.name-title { font-family: 'Dancing Script', cursive; font-size: 60px; color: #ff2d75; opacity: 0; transition: opacity 1s ease-out, transform 1s ease-out; transform: translateY(0); margin-bottom: 10px; }
+
+#uiBox { opacity:0; transform: translateY(0); transition: opacity 1s ease-out, transform 1s ease-out; }
 
 /* الجواب المباشر */
 #letterOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 4000; padding: 20px; }
@@ -94,7 +96,7 @@ button { margin-top: 20px; padding: 12px; border-radius: 50px; border: none; bac
         <div style="font-family:'Dancing Script', cursive; font-size:18px; color:#fff; text-align:center;">بحبك<br><span style="font-size:22px">Rodina</span></div>
     </div>
     <h1 id="revealedName" class="name-title">Rodina</h1>
-    <div id="uiBox" class="glass-card" style="opacity:0; transform:translateY(20px); transition:1s;">
+    <div id="uiBox" class="glass-card" style="opacity:0; transform:translateY(0);">
         <h3>بقالنا مع بعض:</h3>
         <div id="loveCounter" style="font-size: 22px; color: #ff8aa8; font-weight: bold; margin: 10px 0;"></div>
         <button onclick="openLetterDirect()">افتحي الجواب 💌</button>
@@ -137,7 +139,7 @@ function playMusic() {
     }
 }
 
-// 1. انفجار القلب الترحيبي (زي البالونة)
+// انفجار القلب الترحيبي
 function popIntroHeart() {
     const heart = document.getElementById('introHeart');
     const overlay = document.getElementById('introOverlay');
@@ -148,7 +150,7 @@ function popIntroHeart() {
             heart.style.opacity = '0';
             createBurst(window.innerWidth/2, window.innerHeight/2);
             setTimeout(() => overlay.style.display = 'none', 600);
-        }, 2500); // بينفجر بعد 2.5 ثانية تلقائياً أو مع أول لمسة
+        }, 2500);
     }
 }
 
@@ -164,9 +166,9 @@ function startMagic() {
             setTimeout(() => {
                 b.style.top = '12%'; 
                 setTimeout(() => {
-                    b.style.transform = 'scale(2.5)'; b.style.opacity = '0';
+                    b.style.opacity = '0';
                     document.getElementById('revealedName').style.opacity = '1';
-                    document.getElementById('revealedName').style.transform = 'scale(1)';
+                    document.getElementById('revealedName').style.transform = 'translateY(0)';
                     document.getElementById('uiBox').style.opacity = '1';
                     document.getElementById('uiBox').style.transform = 'translateY(0)';
                     createBurst(window.innerWidth/2, window.innerHeight*0.2);
@@ -201,7 +203,7 @@ function startFalling() {
     }, 600);
 }
 
-// 2. الجواب المباشر (بدون ظرف)
+// الجواب المباشر
 function openLetterDirect() {
     document.getElementById('letterOverlay').style.display = 'flex';
     setTimeout(() => {
