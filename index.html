@@ -3,139 +3,143 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>إلى رودينا.. ملكة قلبي ❤️</title>
+<title>Rodina ❤️</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
 
-*{box-sizing:border-box; margin:0; padding:0; font-family:'Cairo',sans-serif}
-body{background:#05000a; color:#fff; overflow:hidden; height:100vh; perspective: 1500px;}
+/* منع أي هزة في الصفحة */
+html, body { 
+    margin: 0; padding: 0; width: 100%; height: 100%; 
+    overflow: hidden; background: #05000a; color: #fff; 
+    font-family: 'Cairo', sans-serif;
+}
 
-#canvas {position:fixed; inset:0; z-index:-2}
+#canvas { position: fixed; inset: 0; z-index: -1; }
 
-/* القلب الكبير - يظهر ويختفي في البداية */
+/* تأثير القلب الترحيبي - يختفي تماماً بعد العرض */
 #introHeart {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
-    color: #ff2d75; font-size: 180px; text-shadow: 0 0 50px rgba(255,45,117,0.7);
+    position: fixed; top: 50%; left: 50%; 
+    transform: translate(-50%, -50%);
     z-index: 100; pointer-events: none;
-    animation: heartIntro 3s forwards ease-in-out;
-    display: flex; align-items: center; justify-content: center;
+    text-align: center; opacity: 0;
+    animation: heartIntroFade 4s forwards;
 }
-#introHeart span { position:absolute; font-family: 'Dancing Script', cursive; font-size: 45px; color: #fff; text-shadow: 0 0 15px #fff;}
-
-@keyframes heartIntro {
-    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    30% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-    70% { transform: translate(-50%, -50%) scale(1); opacity: 1; filter: blur(0px); }
-    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; filter: blur(20px); visibility: hidden; }
+@keyframes heartIntroFade {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    30% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); visibility: hidden; }
 }
 
-.screen{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:10; transition:all 0.8s ease}
-#main{display:none; opacity:0;}
+.heart-big { color: #ff2d75; font-size: 150px; text-shadow: 0 0 30px #ff2d75; }
+.heart-text { 
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Dancing Script', cursive; font-size: 40px; color: #fff; 
+}
 
-/* كارت الدخول */
+/* الشاشات */
+.screen {
+    position: fixed; inset: 0; display: flex; 
+    align-items: center; justify-content: center; 
+    flex-direction: column; z-index: 10;
+}
+#main { display: none; opacity: 0; transition: opacity 1s; }
+
+/* كارت الدخول - يظهر بعد اختفاء القلب */
 .glass-card {
-    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 30px; 
-    text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    opacity: 0; animation: fadeIn 1s forwards 3.2s; /* يظهر بعد ما القلب يختفي */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px; border-radius: 30px; text-align: center;
+    opacity: 0; animation: fadeInCard 1s forwards 4s;
 }
-@keyframes fadeIn { to { opacity: 1; } }
+@keyframes fadeInCard { to { opacity: 1; } }
 
-input{
-    padding:15px; border-radius:50px; border:2px solid #ff2d75;
-    background:rgba(0,0,0,0.5); color:#fff; font-size:18px; text-align:center; outline:none; width:260px;
+input {
+    padding: 12px 20px; border-radius: 50px; border: 2px solid #ff2d75;
+    background: rgba(0,0,0,0.5); color: #fff; font-size: 18px; 
+    text-align: center; outline: none; width: 250px; margin-top: 10px;
 }
-button{
-    margin-top:20px; padding:12px 40px; border-radius:50px; border:none;
-    background:linear-gradient(45deg, #ff2d75, #ff8aa8); color:#fff;
-    font-size:20px; cursor:pointer; font-weight:bold; box-shadow:0 10px 20px rgba(255,45,117,0.3);
+button {
+    margin-top: 20px; padding: 10px 30px; border-radius: 50px; border: none;
+    background: #ff2d75; color: #fff; font-size: 18px; cursor: pointer;
+    font-weight: bold; transition: 0.3s;
 }
+button:hover { background: #ff8aa8; transform: scale(1.05); }
 
-/* التساقط المستمر */
-.falling-item {
-    position: absolute; top: -100px; pointer-events: none; z-index: 5;
+/* العناصر المتساقطة */
+.falling {
+    position: absolute; top: -50px; pointer-events: none;
     animation: fall linear forwards;
 }
-@keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+@keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
 /* الجواب والرسالة */
 #letterOverlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+    position: fixed; inset: 0; background: rgba(0,0,0,0.9);
     display: none; align-items: center; justify-content: center; z-index: 2000;
 }
-.envelope {
-    width: 280px; height: 180px; background: #ff2d75; position: relative;
-    cursor: pointer; transition: transform 0.8s; transform-style: preserve-3d;
-    display: flex; align-items: center; justify-content: center; border-radius: 10px;
-}
-.envelope.open { transform: rotateY(180deg) scale(0.5); opacity: 0; }
-
 .paper {
-    background: #fff; color: #333; width: 90%; max-width: 500px;
-    padding: 40px; border-radius: 15px; position: relative;
-    box-shadow: 0 0 50px rgba(255,255,255,0.2); text-align: center;
-    display: none; opacity: 0; transform: translateY(50px); transition: all 0.8s;
+    background: #fff; color: #333; width: 85%; max-width: 450px;
+    padding: 30px; border-radius: 20px; text-align: center;
+    box-shadow: 0 0 30px rgba(255,45,117,0.3);
 }
-.paper.show { display: block; opacity: 1; transform: translateY(0); }
+.paper h2 { color: #ff2d75; font-family: 'Dancing Script', cursive; margin-bottom: 15px; }
+.paper p { line-height: 1.6; margin-bottom: 10px; font-size: 17px; }
 
-.paper h2 { color: #ff2d75; margin-bottom: 20px; font-family: 'Dancing Script', cursive; font-size: 35px; }
-.paper p { font-size: 18px; line-height: 1.8; color: #444; margin-bottom: 15px; text-align: justify; }
-
-.close-p { position: absolute; top: 10px; left: 15px; cursor: pointer; font-size: 25px; color: #ff2d75; }
-.name-tag { font-family: 'Dancing Script', cursive; font-size: 60px; color: #ff2d75; text-shadow: 0 0 15px #fff; margin-bottom: 20px;}
+.name-tag { font-family: 'Dancing Script', cursive; font-size: 50px; color: #ff2d75; margin-bottom: 10px; }
 </style>
 </head>
 <body onclick="playMusic()">
 
 <canvas id="canvas"></canvas>
 
-<div id="introHeart">❤️<span>Rodina</span></div>
+<div id="introHeart">
+    <div class="heart-big">❤️</div>
+    <div class="heart-text">Rodina</div>
+</div>
 
 <div id="player"></div>
 
 <div id="login" class="screen">
     <div class="glass-card">
-        <h1 style="margin-bottom:20px;">نورتي يا نن عيني ❤️</h1>
+        <h2>نورتي يا نن عيني ❤️</h2>
         <input id="pass" type="password" placeholder="اسمك السكر..." />
         <br>
         <button onclick="unlock()">دوسي يا قلبي ❤️</button>
-        <div id="wrong" style="color:#ff8aa8; margin-top:15px; opacity:0">الاسم غلط.. ركزي يا روحي 😢</div>
+        <div id="wrong" style="color:#ff8aa8; margin-top:10px; opacity:0; transition: 0.3s;">الاسم غلط يا روحي 😢</div>
     </div>
 </div>
 
 <div id="main" class="screen">
     <div class="name-tag">Rodina</div>
-    <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 30px; border: 1px solid #ff2d75; text-align: center; backdrop-filter: blur(10px);">
-        <h2 style="margin-bottom:15px;">بقالنا مع بعض:</h2>
-        <div id="loveCounter" style="font-size: 24px; color: #ff8aa8; font-weight: bold;"></div>
-        <button onclick="openEnvelopeView()" style="margin-top:25px;">افتحي الجواب 💌</button>
+    <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 1px solid #ff2d75; text-align: center;">
+        <h3>حكايتنا مستمرة بقالها:</h3>
+        <div id="loveCounter" style="font-size: 20px; color: #ff8aa8; font-weight: bold; margin: 10px 0;"></div>
+        <button onclick="openLetter()">افتحي الجواب 💌</button>
     </div>
 </div>
 
-<div id="letterOverlay">
-    <div class="envelope" id="env" onclick="revealLetterContent()">
-        <div style="color: #fff; font-size: 60px;">✉️</div>
-    </div>
-    
-    <div class="paper" id="paperMsg">
-        <span class="close-p" onclick="closeLetter()">×</span>
+<div id="letterOverlay" onclick="closeLetter()">
+    <div class="paper" onclick="event.stopPropagation()">
         <h2>لأغلى إنسانة.. رودينا ❤️</h2>
         <p>عارفة يا رودي.. الـ 4 شهور اللي فاتوا دول كانوا أجمل أيام حياتي. كل يوم بكتشف فيكي حاجة تخليني أتأكد إنك أجمل صدفة حصلتلي.</p>
-        <p>انتي مش بس حبيبتي، انتي الأمان اللي كنت مستنيه، والضحكة اللي بتنور أيامي الصعبة. وجودك جنبي بيخلي كل حاجة أحلى.</p>
-        <p>بوعدك إننا نفضل سوا، نسند بعض ونكبر مع بعض، ونحقق كل اللي بنتمناه. ربنا يخليكي ليا يا كل دنيتي.</p>
-        <p><b>بحبك يا نن عيني.. وللأبد. ❤️</b></p>
+        <p>انتي مش بس حبيبتي، انتي الأمان اللي كنت مستنيه، والضحكة اللي بتنور أيامي الصعبة.</p>
+        <p>بوعدك إننا نفضل سوا، نسند بعض ونكبر مع بعض. ربنا يخليكي ليا يا كل دنيتي.</p>
+        <p><b>بحبك يا نن عيني.. وللأبد ❤️</b></p>
+        <button onclick="closeLetter()" style="background: #999; font-size: 14px; padding: 5px 15px;">إغلاق</button>
     </div>
 </div>
 
 <script>
-// نجوم الخلفية
+// نجوم الخلفية الثابتة
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 let stars = [];
 function init() {
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     stars = [];
-    for(let i=0; i<150; i++) stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*1.5});
+    for(let i=0; i<100; i++) stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*1.2});
 }
 function animate() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -160,14 +164,14 @@ function startFalling() {
     const items = ['❤️', '🌹', '🌸', '🌷'];
     setInterval(() => {
         const div = document.createElement('div');
-        div.className = 'falling-item';
+        div.className = 'falling';
         div.style.left = Math.random() * 100 + 'vw';
-        div.style.fontSize = (Math.random() * 20 + 20) + 'px';
-        div.style.animationDuration = (Math.random() * 3 + 5) + 's';
+        div.style.fontSize = '25px';
+        div.style.animationDuration = (Math.random() * 3 + 4) + 's';
         div.innerHTML = `${items[Math.floor(Math.random()*items.length)]}<span style="font-size:10px; display:block; color:#fff;">Rodina</span>`;
         document.body.appendChild(div);
-        setTimeout(() => div.remove(), 8000);
-    }, 450);
+        setTimeout(() => div.remove(), 7000);
+    }, 500);
 }
 
 function unlock() {
@@ -176,35 +180,15 @@ function unlock() {
         document.getElementById('login').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('login').style.display = 'none';
-            document.getElementById('main').style.display = 'flex';
-            setTimeout(() => document.getElementById('main').style.opacity = '1', 50);
+            const m = document.getElementById('main');
+            m.style.display = 'flex';
+            setTimeout(() => m.style.opacity = '1', 50);
             startFalling();
         }, 800);
     } else {
         document.getElementById('wrong').style.opacity = '1';
         setTimeout(() => document.getElementById('wrong').style.opacity = '0', 2000);
     }
-}
-
-function openEnvelopeView() {
-    document.getElementById('letterOverlay').style.display = 'flex';
-}
-
-function revealLetterContent() {
-    document.getElementById('env').classList.add('open');
-    setTimeout(() => {
-        document.getElementById('env').style.display = 'none';
-        const p = document.getElementById('paperMsg');
-        p.style.display = 'block';
-        setTimeout(() => p.classList.add('show'), 50);
-    }, 800);
-}
-
-function closeLetter() {
-    document.getElementById('letterOverlay').style.display = 'none';
-    document.getElementById('paperMsg').classList.remove('show');
-    document.getElementById('env').classList.remove('open');
-    document.getElementById('env').style.display = 'flex';
 }
 
 function updateCounter() {
@@ -215,9 +199,12 @@ function updateCounter() {
     const h = Math.floor((diff/(1000*60*60))%24);
     const m = Math.floor((diff/(1000*60))%60);
     const s = Math.floor((diff/1000)%60);
-    document.getElementById('loveCounter').innerHTML = `${d} يوم، ${h} ساعة، ${m} دقيقة، ${s} ثانية`;
+    document.getElementById('loveCounter').innerHTML = `${d} يوم، ${h}:${m}:${s}`;
 }
 setInterval(updateCounter, 1000);
+
+function openLetter() { document.getElementById('letterOverlay').style.display = 'flex'; }
+function closeLetter() { document.getElementById('letterOverlay').style.display = 'none'; }
 </script>
 </body>
 </html>
