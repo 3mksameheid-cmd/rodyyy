@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Rodina My Love ❤️</title>
+<title>Habiba My Love ❤️</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Dancing+Script:wght@700&display=swap');
 
@@ -94,7 +94,7 @@ button:hover { transform: scale(1.05); background: #ff4d8d; }
 <div id="player" style="width:1px;height:1px;overflow:hidden;position:absolute;"></div>
 
 <div id="introOverlay">
-    <div class="intro-heart" id="introHeart">❤️<span>Rodina</span></div>
+    <div class="intro-heart" id="introHeart">❤️<span>Habiba</span></div>
 </div>
 
 <div id="loginScreen" class="screen">
@@ -110,12 +110,12 @@ button:hover { transform: scale(1.05); background: #ff4d8d; }
 <div id="mainContent" class="screen">
     <div id="mainBalloon">
         <div style="font-family:'Dancing Script',cursive; font-size:20px; color:#fff; text-align:center;">
-            بحبك<br><span style="font-size:24px">Rodina</span>
+            بحبك<br><span style="font-size:24px">Habiba</span>
         </div>
     </div>
 
     <div id="uiReveal" class="revealed-ui">
-        <h1 class="name-title">Rodina</h1>
+        <h1 class="name-title">Habiba</h1>
         <div class="glass-card">
             <h3 style="font-size:18px; margin-bottom:10px;">بقالنا مع بعض:</h3>
             <div id="loveCounter" style="font-size:22px; color:#ff8aa8; font-weight:bold;"></div>
@@ -133,7 +133,7 @@ button:hover { transform: scale(1.05); background: #ff4d8d; }
     </div>
     
     <div class="paper" id="paper">
-        <h2 style="color:#ff2d75; font-family:'Dancing Script',cursive; margin-bottom:15px; font-size:30px;">إلى رودينا ❤️</h2>
+        <h2 style="color:#ff2d75; font-family:'Dancing Script',cursive; margin-bottom:15px; font-size:30px;">إلى حبيبة ❤️</h2>
         <p style="font-size:17px; line-height:1.7; margin-bottom:10px;">
             الـ 4 شهور دول كانوا حلم جميل مش عايز أصحى منه. انتي أجمل حاجة حصلت في دنيتي كلها.
         </p>
@@ -144,7 +144,7 @@ button:hover { transform: scale(1.05); background: #ff4d8d; }
         <button id="surpriseBtn" onclick="ultimateSurprise()" style="background:#ff2d75; margin-top:15px; width:180px; box-shadow: 0 0 15px #ff2d75;">أهم كلمة ليكي 💎</button>
         
         <div id="finalMessage" style="display:none; margin-top:20px; color:#ff2d75; font-weight:bold; font-size:18px; animation: fadeIn 2s; border-top: 1px dashed #ff2d75; padding-top: 15px;">
-            "وعد مني.. هفضل أحبك وأحافظ عليكي لحد آخر يوم في عمري. انتي مش بس حبيبتي، انتي عوض ربنا ليا اللي استنيته عمر كامل. بعشقك يا رودي ❤️"
+            "وعد مني.. هفضل أحبك وأحافظ عليكي لحد آخر يوم في عمري. انتي مش بس حبيبتي، انتي عوض ربنا ليا اللي استنيته عمر كامل. بعشقك يا حبيبة ❤️"
         </div>
 
         <button onclick="closeLetter()" style="background:#444; margin-top:25px; width:100px; display:block; margin-left:auto; margin-right:auto;">إغلاق</button>
@@ -184,7 +184,7 @@ setTimeout(() => { document.getElementById('introOverlay').style.display='none';
 // بدء السحر
 function magicStart() {
     let p = document.getElementById('pass').value.toLowerCase();
-    if(p === 'rodina' || p === 'رودينا') {
+    if(p === 'habiba' || p === 'حبيبة') {
         playMusic();
         document.getElementById('loginScreen').style.opacity='0';
         setTimeout(() => {
@@ -217,7 +217,7 @@ function magicStart() {
 function createBurst() {
     for(let i=0;i<30;i++){
         const d=document.createElement('div');
-        d.className='falling'; d.innerHTML='Rodina ❤️';
+        d.className='falling'; d.innerHTML='Habiba ❤️';
         d.style.left=(45+Math.random()*10)+'vw'; d.style.top='20vh';
         d.style.animationDuration=(1+Math.random())+'s';
         document.body.appendChild(d); setTimeout(()=>d.remove(),2000);
@@ -230,7 +230,7 @@ function startFalling(){
         const d=document.createElement('div');
         d.className='falling'; d.style.left=Math.random()*100+'vw'; d.style.top='-50px';
         d.style.animationDuration=(4+Math.random()*3)+'s';
-        d.innerHTML='Rodina ❤️';
+        d.innerHTML='Habiba ❤️';
         document.body.appendChild(d); setTimeout(()=>d.remove(),7000);
     },600);
 }
@@ -283,9 +283,4 @@ function updateCounter(){
     const h=Math.floor((diff/3600000)%24);
     const m=Math.floor((diff/60000)%60);
     const s=Math.floor((diff/1000)%60);
-    document.getElementById('loveCounter').innerHTML=`${d} يوم، ${h}:${m}:${s}`;
-}
-setInterval(updateCounter,1000);
-</script>
-</body>
-</html>
+    document.getElementById('loveCounter').innerHTML=
