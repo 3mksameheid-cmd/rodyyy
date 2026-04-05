@@ -1,190 +1,147 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rodina My Love ❤️</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rodina My Love ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Dancing+Script:wght@700&display=swap');
 
-        body {
-            margin: 0;
-            padding: 0;
-            background: #0a0a0a;
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#05000a; color:#fff; font-family:'Cairo', sans-serif; overflow:hidden; height:100vh; display:flex; align-items:center; justify-content:center; cursor:pointer; }
 
-        #starField {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
+#starField { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
 
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 90%;
-        }
+.glass-card {
+    background:rgba(255,255,255,0.05); backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.1); padding:25px; border-radius:25px;
+    text-align:center; width:90%; max-width:350px; position:relative; z-index:10;
+}
 
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            color: #ff2d75;
-            margin-bottom: 10px;
-            text-shadow: 0 0 15px #ff2d75;
-        }
+.name-title { font-family:'Dancing Script',cursive; font-size:50px; color:#ff2d75; text-shadow:0 0 20px #ff2d75; margin-bottom:10px; }
 
-        .counter {
-            font-size: 1.5rem;
-            margin: 20px 0;
-            font-weight: bold;
-            color: #ff8aa8;
-        }
+/* الصندوق الوردي اللي في الصورة */
+.envelope-box {
+    background:#ff2d75; width:100%; height:180px; border-radius:15px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:20px;
+    box-shadow:0 10px 20px rgba(255,45,117,0.3); transition:0.5s; position:relative;
+}
 
-        .message {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
+.envelope-box span { font-size:60px; }
 
-        .heart {
-            font-size: 50px;
-            animation: pulse 1.5s infinite;
-            display: inline-block;
-        }
+/* الورقة اللي هتظهر جوه الصندوق */
+#letterContent {
+    display:none; color:#fff; font-size:16px; line-height:1.6; animation: fadeIn 1s;
+}
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
+button {
+    background:rgba(255,45,117,0.2); border:1px solid #ff2d75; color:#fff;
+    padding:12px 25px; border-radius:50px; cursor:pointer; width:100%;
+    font-weight:bold; transition:0.3s;
+}
+button:hover { background:#ff2d75; transform:scale(1.05); }
 
-        .falling-heart {
-            position: absolute;
-            color: #ff2d75;
-            pointer-events: none;
-            z-index: 999;
-            animation: fall linear forwards;
-        }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
-
-        #player { display: none; }
-    </style>
+.falling { position:absolute; pointer-events:none; z-index:5; animation:fall linear forwards; color:#ff2d75; }
+@keyframes fall { to { transform:translateY(110vh) rotate(360deg); } }
+</style>
 </head>
-<body onclick="startEffects()">
+<body onclick="playMusic()">
 
-    <canvas id="starField"></canvas>
+<canvas id="starField"></canvas>
+<div id="player" style="display:none"></div>
+
+<div class="glass-card">
+    <h1 class="name-title">Rodina</h1>
     
-    <div id="musicContainer"></div>
-
-    <div class="container">
-        <div class="heart">❤️</div>
-        <h1>Rodina</h1>
-        <div class="message">بقالنا مع بعض يا روحي:</div>
-        <div id="loveCounter" class="counter"></div>
-        <div class="message">
-            انتي أجمل حاجة حصلت في حياتي من يوم ما عرفتك في شهر 10.<br>
-            بحبك يا رودينا ❤️
+    <div class="envelope-box" id="mailBox">
+        <span id="mailIcon">✉️</span>
+        <div id="letterContent">
+            بقالنا مع بعض 185 يوم.. <br>
+            كل ثانية فيهم كنتي أنتي النور اللي في حياتي. <br>
+            بعشقك يا رودينا ❤️
         </div>
-        <div style="font-size: 10px; color: #555; margin-top: 10px;">Developer: sameh</div>
     </div>
 
-    <script>
-        // العداد من 1 أكتوبر 2025
-        function updateCounter() {
-            const startDate = new Date('2025-10-01T00:00:00');
-            const now = new Date();
-            const diff = now - startDate;
+    <div id="counterArea">
+        <div id="loveCounter" style="color:#ff8aa8; font-weight:bold; margin-bottom:15px;"></div>
+    </div>
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
+    <button id="openBtn" onclick="openLetter()">📩 افتحي جوابي ليكي</button>
+    <div style="font-size:10px; color:#555; margin-top:15px;">Developer: sameh</div>
+</div>
 
-            document.getElementById('loveCounter').innerHTML = 
-                days + " يوم و " + hours + ":" + minutes + ":" + seconds;
-        }
+<script>
+// تشغيل الموسيقى والنجوم
+function playMusic() {
+    if(!window.musicPlayed) {
+        document.getElementById('player').innerHTML = `<iframe src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY" allow="autoplay"></iframe>`;
+        window.musicPlayed = true;
+        startHearts();
+    }
+}
 
-        setInterval(updateCounter, 1000);
-        updateCounter();
+// وظيفة فتح الجواب
+function openLetter() {
+    // إخفاء الأيقونة وإظهار الكلام
+    document.getElementById('mailIcon').style.display = 'none';
+    document.getElementById('letterContent').style.display = 'block';
+    // تغيير الزرار
+    document.getElementById('openBtn').innerHTML = "بموت فيكي ❤️";
+    document.getElementById('openBtn').style.background = "#ff2d75";
+    
+    // انفجار قلوب
+    for(let i=0; i<30; i++) {
+        createHeart();
+    }
+}
 
-        // خلفية النجوم
-        const canvas = document.getElementById('starField');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
+// العداد (من 1 أكتوبر 2025)
+function updateCounter(){
+    const startDate = new Date('2025-10-01T00:00:00');
+    const diff = new Date() - startDate;
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff / 3600000) % 24);
+    const m = Math.floor((diff / 60000) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+    document.getElementById('loveCounter').innerHTML = `${d} يوم و ${h}:${m}:${s}`;
+}
+setInterval(updateCounter, 1000);
+updateCounter();
 
-        function initStars() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            stars = [];
-            for(let i=0; i<150; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speed: Math.random() * 0.5
-                });
-            }
-        }
+// قلوب بتطير
+function createHeart() {
+    const h = document.createElement('div');
+    h.className = 'falling';
+    h.innerHTML = '❤️';
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.top = '-20px';
+    h.style.fontSize = (Math.random() * 20 + 15) + 'px';
+    h.style.animationDuration = (Math.random() * 3 + 2) + 's';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 4000);
+}
 
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#fff";
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-                star.y += star.speed;
-                if(star.y > canvas.height) star.y = 0;
-            });
-            requestAnimationFrame(drawStars);
-        }
+function startHearts() {
+    setInterval(createHeart, 600);
+}
 
-        initStars();
-        drawStars();
-
-        // تشغيل الموسيقى والقلوب عند أول لمسة
-        let started = false;
-        function startEffects() {
-            if (!started) {
-                // تشغيل الأغنية
-                document.getElementById('musicContainer').innerHTML = `
-                    <iframe src="https://www.youtube.com/embed/T0AA8GvHzhY?autoplay=1&loop=1&playlist=T0AA8GvHzhY" 
-                    allow="autoplay" style="display:none;"></iframe>`;
-                
-                // مطر القلوب
-                setInterval(() => {
-                    const heart = document.createElement('div');
-                    heart.className = 'falling-heart';
-                    heart.innerHTML = '❤️';
-                    heart.style.left = Math.random() * 100 + 'vw';
-                    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                    document.body.appendChild(heart);
-                    setTimeout(() => heart.remove(), 5000);
-                }, 3000);
-                
-                started = true;
-            }
-        }
-
-        window.addEventListener('resize', initStars);
-    </script>
+// خلفية النجوم
+const canvas = document.getElementById('starField');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function initStars() {
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    stars = [];
+    for(let i=0; i<100; i++) stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*1.5});
+}
+function drawStars() {
+    ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="#fff";
+    stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x,s.y,s.s,0,Math.PI*2); ctx.fill(); s.y+=0.2; if(s.y>canvas.height)s.y=0; });
+    requestAnimationFrame(drawStars);
+}
+initStars(); drawStars();
+</script>
 </body>
 </html>
